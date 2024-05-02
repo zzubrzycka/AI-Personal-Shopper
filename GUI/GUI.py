@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, ttk
 from PIL import Image, ImageTk
 
 def load_image(entry):
@@ -31,8 +31,23 @@ root.title("Image Input GUI")
 image_paths = [None, None]
 frame_texts = ["Add your picture here", "Add your garment here"]
 
+tab_control = ttk.Notebook(root)
+main_tab = ttk.Frame(tab_control)
+input_img_tab = ttk.Frame(tab_control)
+avatars_tab = ttk.Frame(tab_control)
+clothes_tab = ttk.Frame(tab_control)
+output_img_tab = ttk.Frame(tab_control)
+
+tab_control.add(main_tab, text="Virtual try-on")
+tab_control.add(input_img_tab, text="Input images")
+tab_control.add(avatars_tab, text="Avatars")
+tab_control.add(clothes_tab, text="Clothes to try on")
+tab_control.add(output_img_tab, text="Output images")
+
+tab_control.pack(expand=1, fill='both')
+
 # Create frames for image selectors
-frames = [tk.Frame(root, bd=2, relief="solid", padx=10, pady=10) for _ in range(2)]
+frames = [tk.Frame(main_tab, bd=2, relief="solid", padx=10, pady=10) for _ in range(2)]
 image_labels = [tk.Label(frame, text=frame_texts[i], font=('Arial', 12)) for i, frame in enumerate(frames)]
 delete_buttons = []
 
@@ -41,13 +56,13 @@ for i, frame in enumerate(frames):
     image_labels[i].pack(fill='both', expand=True)
     image_labels[i].bind("<Button-1>", lambda event, idx=i: load_image(idx))  # Bind click event to the label
     # Creating delete buttons beneath the frames
-    delete_button = tk.Button(root, text="Delete", command=lambda idx=i: delete_image(idx), state=tk.DISABLED)
+    delete_button = tk.Button(main_tab, text="Delete", command=lambda idx=i: delete_image(idx), state=tk.DISABLED)
     delete_button.grid(row=1, column=i, pady=5)
     delete_buttons.append(delete_button)
 
 # Create a process button
 process_button = tk.Button(root, text="Run Script", command=run_script)
-process_button.grid(row=2, column=0, columnspan=2, pady=20)
+process_button.pack(pady=20)
 
 # Run the GUI
 root.mainloop()
