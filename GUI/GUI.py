@@ -39,15 +39,15 @@ delete_buttons = []
 for i, frame in enumerate(frames):
     frame.grid(row=0, column=i, padx=20, pady=20)
     image_labels[i].pack(fill='both', expand=True)
-    # Creating delete buttons within the loop to correctly associate with frames
-    delete_button = tk.Button(frame, text="Delete", command=lambda idx=i: delete_image(idx), state=tk.DISABLED)
-    delete_button.pack()
+    image_labels[i].bind("<Button-1>", lambda event, idx=i: load_image(idx))  # Bind click event to the label
+    # Creating delete buttons beneath the frames
+    delete_button = tk.Button(root, text="Delete", command=lambda idx=i: delete_image(idx), state=tk.DISABLED)
+    delete_button.grid(row=1, column=i, pady=5)
     delete_buttons.append(delete_button)
-    frame.bind("<Button-1>", lambda event, idx=i: load_image(idx))
 
 # Create a process button
 process_button = tk.Button(root, text="Run Script", command=run_script)
-process_button.grid(row=1, column=0, columnspan=2, pady=20)
+process_button.grid(row=2, column=0, columnspan=2, pady=20)
 
 # Run the GUI
 root.mainloop()
