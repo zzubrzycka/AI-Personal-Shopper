@@ -1,4 +1,5 @@
 from PIL import Image
+import os
 
 def blend_images(image_path1, image_path2):
     # Open the images
@@ -27,10 +28,25 @@ def apply_sepia_tone(image):
 def process(image_path1, image_path2):
     blended = blend_images(image_path1, image_path2)
     sepia = apply_sepia_tone(blended)
-    # Save or display the result
-    sepia.show()  # This will display the image using the default image viewer
+
+    # Define the directory to save the image
+    save_directory = "output_images"
+    if not os.path.exists(save_directory):
+        os.makedirs(save_directory)
+
+    # Construct a unique filename based on the input filenames
+    base_name1 = os.path.splitext(os.path.basename(image_path1))[0]
+    base_name2 = os.path.splitext(os.path.basename(image_path2))[0]
+    output_filename = f"{base_name1}_{base_name2}.png"
+    output_path = os.path.join(save_directory, output_filename)
+
+    # Save the image to the specified directory
+    sepia.save(output_path, "PNG")
+
+    # Return the path to the saved image
+    return output_path
 
 if __name__ == '__main__':
     import sys
     if len(sys.argv) > 2:
-        process(sys.argv[1], sys.argv[2])
+        print(process(sys.argv[1], sys.argv[2]))

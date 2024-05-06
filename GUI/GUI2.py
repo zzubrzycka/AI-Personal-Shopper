@@ -12,8 +12,8 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         # Set up main window properties
-        self.setWindowTitle("AI Personal Shopper")
-        self.setGeometry(100, 100, 1100, 600)
+        self.setWindowTitle("Welcome to AI Personal Shopper!")
+        self.setGeometry(100, 100, 1250, 600)
 
         # Tab widget
         self.tabs = QTabWidget()
@@ -56,16 +56,49 @@ class MainWindow(QMainWindow):
         # Left side: title and instructions
         vertical_layout1 = QVBoxLayout()
 
-        title = QLabel("AI Personal Shopper")
+        title = QLabel("Welcome to AI Personal Shopper!")
         title_font = QFont("Arial", 20, QFont.Bold)
         title.setFont(title_font)
         vertical_layout1.addWidget(title)
 
-        instructions = QLabel("Instructions:\n1. Choose images.\n2. Run the script.\n3. View the results.")
+        introduction_text = """
+                <p>Explore our virtual fitting room designed to make your fashion journey effortless and fun. Here's what you'll find:</p>
+                <ul>
+                    <li><b>Home:</b> Upload your own images to try on clothing items virtually. Select two images, blend them, and preview your new look!</li>
+                    <li><b>Avatars:</b> Access a collection of ready-to-use avatars for virtual fitting. Choose one and see how it enhances your style.</li>
+                    <li><b>User Images:</b> Browse previously uploaded images for easy access and reuse. Quickly apply them to new clothing combinations.</li>
+                    <li><b>Output Images:</b> View all your virtual fitting results in one place. Admire the blended images generated through our application.</li>
+                </ul>
+                <br>
+                <br>
+                <p>
+                How to use our app:
+                    <ol type="1">
+                    <li>Upload a picture of yourself by clicking the first button.</li>
+                    <li>Upload the picture of the clothing by clicking the second button.</li>
+                    <li>Click the "Try it on!" button.</li>
+                    <li>View the results.</li>
+                    </ol>
+                </p>
+                
+                <br>
+                <p>Get started and discover the future of fashion with <br>AI Personal Shopper!</p>
+                """
+
+        introduction = QLabel(introduction_text)
+        introduction_font = QFont("Arial", 12)
+        introduction.setMinimumWidth(350)
+        introduction.setFont(introduction_font)
+        introduction.setWordWrap(True)
+        vertical_layout1.addWidget(introduction)
+        vertical_layout1.addSpacing(50)
+
+        instructions = QLabel("Instructions:\n\n1. Upload a picture of yourself by clicking the first button.\n2. Upload the picture of the clothing by clicking the second button.\n3. Click the 'Try it on!' button\n4. View the results.")
         instructions_font = QFont("Arial", 12)
+        instructions.setMaximumWidth(350)
         instructions.setFont(instructions_font)
         instructions.setWordWrap(True)
-        vertical_layout1.addWidget(instructions)
+        #vertical_layout1.addWidget(instructions)
 
 
         # Right side: image loading
@@ -74,10 +107,11 @@ class MainWindow(QMainWindow):
         # Button and image label for the first image
         images_layout.addSpacing(20)
         self.upload_button_1 = QPushButton("1. Upload a picture of yourself")
-        self.upload_button_1.setStyleSheet("font-size: 14px;")
+        self.upload_button_1.setStyleSheet("font-size: 17px;")
         self.upload_button_1.setMinimumWidth(300)
         self.upload_button_1.setMinimumHeight(40)
         self.image_label_1 = QLabel("No Image Loaded")
+        self.image_label_1.setAlignment(Qt.AlignCenter)
         self.image_label_1.setFixedSize(250, 250)
        # self.image_label_1.setAlignment(Qt.AlignCenter)
         self.image_label_1.setStyleSheet("border: 2px solid black")
@@ -89,11 +123,12 @@ class MainWindow(QMainWindow):
 
         # Button and image label for the second image
         self.upload_button_2 = QPushButton("2. Upload the picture of the clothing")
-        self.upload_button_2.setStyleSheet("font-size: 14px;")
+        self.upload_button_2.setStyleSheet("font-size: 17px;")
 
         self.upload_button_2.setMinimumWidth(300)
         self.upload_button_2.setMinimumHeight(40)
         self.image_label_2 = QLabel("No Image Loaded")
+        self.image_label_2.setAlignment(Qt.AlignCenter)
         self.image_label_2.setFixedSize(250, 250)
         self.image_label_2.setStyleSheet("border: 2px solid black")
         images_layout.addWidget(self.upload_button_2, alignment=Qt.AlignHCenter)
@@ -120,6 +155,7 @@ class MainWindow(QMainWindow):
 
 
         self.output_image_label = QLabel("No Output Image Yet")
+        self.output_image_label.setAlignment(Qt.AlignCenter)
         #self.output_image_label.setMinimumHeight(300)
         #self.output_image_label.setMinimumWidth(250)
         self.output_image_label.setFixedSize(300, 400)
@@ -196,15 +232,22 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(self, "Missing Images", "Please load both images before running the script.")
             return
 
+        # Extract file names without extensions
+        name1 = os.path.splitext(os.path.basename(self.image_1_path))[0]
+        name2 = os.path.splitext(os.path.basename(self.image_2_path))[0]
+        output_image_name = f"{name1}_{name2}.png"
+        output_image_path = os.path.join(self.output_dir, output_image_name)
+
+
         # Execute the process_images.py script and save output to the output_images folder
         try:
-            output_image_name = "output_image.png"  # Adjust this to your desired filename
-            output_image_path = os.path.join(self.output_dir, output_image_name)
             subprocess.run(
                 ["python", "process_images.py", self.image_1_path, self.image_2_path, output_image_path],
                 check=True
             )
 
+            pixmap = QPixmap(output_image_path).scaled(300, 400, Qt.KeepAspectRatio)
+            self.output_image_label.setPixmap(pixmap)
             # Add the output image to the "Output Images" tab
             output_label = QLabel()
             output_label.setPixmap(QPixmap(output_image_path).scaled(200, 200, Qt.KeepAspectRatio))
