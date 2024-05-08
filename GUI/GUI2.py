@@ -214,13 +214,13 @@ class MainWindow(QMainWindow):
 
             target_path2 = os.path.join(self.user_input_image_dir, image_name)
             print(target_path2)
-            shutil.rmtree('user_input_image')
+            os.system(f'rm -rf {self.user_input_image_dir}')
             shutil.copy(image_path, target_path2)
 
         if index ==2:
             target_path2 = os.path.join(self.garment_input_image_dir, image_name)
             print(target_path2)
-            shutil.rmtree('garment_input_image')
+            os.system(f'rm -rf {self.garment_input_image_dir}')
             shutil.copy(image_path, target_path2)
 
 
