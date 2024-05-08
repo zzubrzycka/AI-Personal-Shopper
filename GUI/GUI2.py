@@ -45,6 +45,8 @@ class MainWindow(QMainWindow):
 
         # Ensure input and output directories exist
         self.input_dir = "input_images"
+        self.user_input_image_dir = "user_input_image"
+        self.garment_input_image_dir = "garment_input_image"
         self.output_dir = "output_images"
         os.makedirs(self.input_dir, exist_ok=True)
         os.makedirs(self.output_dir, exist_ok=True)
@@ -205,16 +207,29 @@ class MainWindow(QMainWindow):
         # Open a file dialog to select an image
         image_path, _ = QFileDialog.getOpenFileName(self, "Select an Image", "", "Images (*.png *.jpg *.jpeg *.bmp)")
         if image_path:
-            # Copy the image to the input_images directory
             image_name = os.path.basename(image_path)
-            target_path = os.path.join(self.input_dir, image_name)
-            shutil.copy(image_path, target_path)
-            self.set_image_label(index, target_path)
 
-            # Add the uploaded image to the "User Images" tab
-            user_image_label = QLabel()
-            user_image_label.setPixmap(QPixmap(target_path).scaled(100, 100, Qt.KeepAspectRatio))
-            self.uploaded_images_layout.addWidget(user_image_label)
+        if index == 1:
+            target_path2 = os.path.join(self.user_input_image_dir, image_name)
+            shutil.rmtree(target_path2)
+            shutil.copy(image_path, target_path2)
+
+        if index ==2:
+            target_path2 = os.path.join(self.garment_input_image_dir, image_name)
+            shutil.rmtree(target_path2)
+            shutil.copy(image_path, target_path2)
+
+
+        # Copy the image to the input_images directory
+
+        target_path = os.path.join(self.input_dir, image_name)
+        shutil.copy(image_path, target_path)
+        self.set_image_label(index, target_path)
+
+        # Add the uploaded image to the "User Images" tab
+        user_image_label = QLabel()
+        user_image_label.setPixmap(QPixmap(target_path).scaled(100, 100, Qt.KeepAspectRatio))
+        self.uploaded_images_layout.addWidget(user_image_label)
 
     def set_image_label(self, index, image_path):
         # Ensure the loaded image is displayed directly below the corresponding button

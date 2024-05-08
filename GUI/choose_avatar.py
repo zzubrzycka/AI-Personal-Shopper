@@ -12,8 +12,8 @@ def convert_strings_to_ints(lst):
 
         except ValueError:
             converted_list.append(item)
-    lst = []
-    lst = converted_list
+
+    return converted_list
 
 
 def read_csv_file(file_path, encoding='utf-8'):
@@ -36,12 +36,11 @@ def read_csv_file(file_path, encoding='utf-8'):
 file_path = 'avatars_measurements2.csv'
 all_data = read_csv_file(file_path, encoding='ISO-8859-1')
 
-print(all_data)
 
 all_vectors = []
+vectors_dict = {}
 
-
-for i in range(0, 8):
+for i in range(0, 10):
     first_row = all_data[0]
     second_row = all_data[1]
 
@@ -53,11 +52,24 @@ for i in range(0, 8):
 
     all_vectors.append(person_type)
 
-print(all_vectors)
+    person_type_key = f"{first_row[i]}_{second_row[i]}"
+    converted_list = convert_strings_to_ints(person_type)
+    converted_list.pop(0)
+    converted_list.pop(0)
 
-for i in range(len(all_vectors)):
-    convert_strings_to_ints(all_vectors[i])
+    vectors_dict[person_type_key] = converted_list
 
-print(all_vectors)
+
+
+print(vectors_dict)
+
+    #print(convert_strings_to_ints(all_vectors[i]))
+
+
+
+
 #user input: gender, height, chest, waist, hips, inseam, weight
 example_user_input = ['Women', 170, 85, 65, 87, 79, 60]
+
+
+
