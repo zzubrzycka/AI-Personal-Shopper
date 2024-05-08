@@ -232,6 +232,8 @@ class MainWindow(QMainWindow):
                 item_path = os.path.join(self.garment_input_image_dir, item)
                 os.remove(item_path)
 
+                #dupa
+
             shutil.copy(image_path, target_path2)
 
 
