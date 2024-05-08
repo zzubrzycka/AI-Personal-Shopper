@@ -206,17 +206,21 @@ class MainWindow(QMainWindow):
     def upload_image(self, index):
         # Open a file dialog to select an image
         image_path, _ = QFileDialog.getOpenFileName(self, "Select an Image", "", "Images (*.png *.jpg *.jpeg *.bmp)")
+        print(image_path)
         if image_path:
             image_name = os.path.basename(image_path)
 
         if index == 1:
+
             target_path2 = os.path.join(self.user_input_image_dir, image_name)
-            shutil.rmtree(target_path2)
+            print(target_path2)
+            shutil.rmtree('user_input_image')
             shutil.copy(image_path, target_path2)
 
         if index ==2:
             target_path2 = os.path.join(self.garment_input_image_dir, image_name)
-            shutil.rmtree(target_path2)
+            print(target_path2)
+            shutil.rmtree('garment_input_image')
             shutil.copy(image_path, target_path2)
 
 
