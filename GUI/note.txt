@@ -1,0 +1,5 @@
+ps -u $(id -u) -o pid= \
+    | xargs -I PID -r cat /proc/PID/environ 2> /dev/null \
+    | tr '\0' '\n' \
+    | grep ^DISPLAY=: \
+    | sort -u
