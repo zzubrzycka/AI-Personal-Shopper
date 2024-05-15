@@ -188,8 +188,13 @@ class MainWindow(QMainWindow):
         self.home_tab.setLayout(horizontal_layout)
 
     def open_popup(self, index):
-        popup = PopupDialog(self, index)
+        popup = PopupDialog(self, index, self.image_label_1)
+        popup.accepted.connect(popup.close)
         popup.exec_()
+
+    def closePopup(self):
+
+        self.sender().close()
 
     def setup_avatar_tab_EARLIER(self):
         layout = QVBoxLayout()
@@ -315,11 +320,12 @@ class MainWindow(QMainWindow):
 
 class PopupDialog(QDialog):
 
-    def __init__(self, main_window, index):
+    def __init__(self, main_window, index, image_label_1):
         super().__init__(main_window)
 
         self.main_window = main_window
         self.index = index
+        self.image_label_1 = image_label_1
 
         self.setWindowTitle("Picture source")
 
@@ -398,9 +404,33 @@ class MeasurementsDialog(QDialog):
     def get_measurements(self):
         gender = self.gender_combobox.currentText()
         measurements = [line_edit.text() for line_edit in self.measurement_line_edits]
-        measurements.append(gender)
+        measurements.insert(0, gender)
         self.accept()
-        return measurements
+        try:
+            result = subprocess.run(
+                ["python", "choose_avatar.py"] + measurements,
+                check=True,
+                capture_output=True,
+                text=True
+            )
+            nearest_size = result.stdout.strip()
+            print("Nearest size:", nearest_size)
+
+            avatar_path = os.path.join("avatars", nearest_size+".png")
+            if os.path.exists(avatar_path):
+
+                pixmap = QPixmap(avatar_path)
+
+               # self.main_window.image_label_1.setPixmap(pixmap)
+                self.main_window.image_label_1.setPixmap(
+                    pixmap.scaled(self.main_window.image_label_1.size(), Qt.KeepAspectRatioByExpanding))
+            else:
+                print("Avatar for nearest size not found:", nearest_size)
+
+
+
+        except Exception as e:
+            print("An error occurred while running 'choose_avatar.py':", e)
 
     def choose_nearest_avatar(self, get_measurements):
         subprocess.run(

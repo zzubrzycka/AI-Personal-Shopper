@@ -109,14 +109,13 @@ def find_nearest_size(user_input, size_dict):
     return nearest_size
 
 
-find_nearest_size(example_user_input, vectors_dict)
+#find_nearest_size(example_user_input, vectors_dict)
 
 
 
 if __name__ == '__main__':
     import sys
     if len(sys.argv) > 1:
-        print(find_nearest_size(sys.argv[1], vectors_dict))
-
-
+        user_input = [float(arg) if i > 0 else arg for i, arg in enumerate(sys.argv[1:])]
+        print(find_nearest_size(user_input, vectors_dict))
 
