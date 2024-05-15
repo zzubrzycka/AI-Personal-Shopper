@@ -2,8 +2,10 @@ import sys
 import os
 import shutil
 import subprocess
-from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QLabel, QPushButton,
-                             QFileDialog, QDialog, QGridLayout, QMessageBox, QSpacerItem, QSizePolicy)
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QLabel,
+                             QPushButton,
+                             QFileDialog, QDialog, QGridLayout, QMessageBox, QSpacerItem, QSizePolicy, QComboBox,
+                             QLineEdit, QFormLayout)
 from PyQt5.QtGui import QPixmap, QFont
 from PyQt5.QtCore import Qt
 
@@ -146,8 +148,12 @@ class MainWindow(QMainWindow):
         images_layout.addSpacing(25)
 
         # Connect button actions
-        self.upload_button_1.clicked.connect(lambda: self.upload_image(1))
-        self.upload_button_2.clicked.connect(lambda: self.upload_image(2))
+       # self.upload_button_1.clicked.connect(lambda: self.upload_image(1))
+       # self.upload_button_2.clicked.connect(lambda: self.upload_image(2))
+
+        self.upload_button_1.clicked.connect(lambda: self.open_popup(1))
+        self.upload_button_2.clicked.connect(lambda: self.open_popup(2))
+
         self.run_script_button.clicked.connect(self.process_images)
 
         vertical_layout3 = QVBoxLayout()
@@ -181,7 +187,11 @@ class MainWindow(QMainWindow):
         #horizontal_layout.addLayout(vertical_layout3)
         self.home_tab.setLayout(horizontal_layout)
 
-    def setup_avatar_tab(self):
+    def open_popup(self, index):
+        popup = PopupDialog(self, index)
+        popup.exec_()
+
+    def setup_avatar_tab_EARLIER(self):
         layout = QVBoxLayout()
         layout.addWidget(QLabel("Avatars:"))
 
@@ -231,8 +241,6 @@ class MainWindow(QMainWindow):
             for item in os.listdir(self.garment_input_image_dir):
                 item_path = os.path.join(self.garment_input_image_dir, item)
                 os.remove(item_path)
-
-                #dupa
 
             shutil.copy(image_path, target_path2)
 
@@ -286,6 +294,126 @@ class MainWindow(QMainWindow):
             self.output_images_layout.addWidget(output_label)
         except Exception as e:
             QMessageBox.critical(self, "Error", f"An error occurred while processing images: {e}")
+
+
+    def setup_avatar_tab(self):
+        layout = QVBoxLayout()
+        layout.addWidget(QLabel("Avatars:"))
+
+        # Load avatar images from a specified folder
+        avatar_folder = "avatars"  # Specify the folder path containing avatar images
+        avatar_images = os.listdir(avatar_folder)
+
+        # Add avatar images to the layout
+        for image_name in avatar_images:
+            image_path = os.path.join(avatar_folder, image_name)
+            avatar_label = QLabel()
+            avatar_label.setPixmap(QPixmap(image_path).scaled(100, 100))  # Adjust the size as needed
+            layout.addWidget(avatar_label)
+
+        self.avatar_tab.setLayout(layout)
+
+class PopupDialog(QDialog):
+
+    def __init__(self, main_window, index):
+        super().__init__(main_window)
+
+        self.main_window = main_window
+        self.index = index
+
+        self.setWindowTitle("Picture source")
+
+        self.label = QLabel("Choose the source of your picture:")
+
+        self.prev_uploaded_pic_button = QPushButton("Choose from previously uploaded pictures")
+        self.avatars_button = QPushButton("Choose from avatars")
+        self.new_pic_button = QPushButton("Upload a new picture")
+
+        # Tworzymy układ przycisków
+        button_layout = QHBoxLayout()
+        button_layout.addWidget(self.prev_uploaded_pic_button)
+        button_layout.addWidget(self.avatars_button)
+        button_layout.addWidget(self.new_pic_button)
+
+        # Tworzymy układ główny
+        layout = QVBoxLayout()
+        layout.addWidget(self.label)
+        layout.addLayout(button_layout)
+
+        self.setLayout(layout)
+
+
+        self.new_pic_button.clicked.connect(self.upload_new_picture)
+        self.avatars_button.clicked.connect(self.open_measurementsdialog)
+
+    def upload_new_picture(self):
+        self.main_window.upload_image(self.index)
+        self.accept()
+
+    def open_measurementsdialog(self, index):
+        popup = MeasurementsDialog(self, index)
+        popup.exec_()
+
+
+
+class MeasurementsDialog(QDialog):
+
+    def __init__(self, main_window, index):
+        super().__init__(main_window)
+
+        self.main_window = main_window
+        self.index = index
+
+        self.setWindowTitle("Measurements")
+
+        self.label = QLabel("Please provide your measurements:")
+        self.label.setAlignment(Qt.AlignCenter)
+
+        self.gender_label = QLabel("Gender:")
+        self.gender_combobox = QComboBox()
+        self.gender_combobox.addItems(["Woman", "Man"])
+
+        # Fields for measurements
+        self.measurement_labels = ["Height (cm):", "Chest (cm):", "Waist (cm):", "Hip (cm):", "Inseam (cm):", "Weight (kg):"]
+        self.measurement_line_edits = [QLineEdit() for _ in range(len(self.measurement_labels))]
+
+        # Layout for measurement fields
+        self.measurement_layout = QFormLayout()
+        for label, line_edit in zip(self.measurement_labels, self.measurement_line_edits):
+            self.measurement_layout.addRow(label, line_edit)
+
+        # Button to indicate measurements are done
+        self.done_button = QPushButton("Send")
+        self.done_button.clicked.connect(self.get_measurements)
+
+        # Layout
+        layout = QVBoxLayout()
+        layout.addWidget(self.label)
+        layout.addWidget(self.gender_label)
+        layout.addWidget(self.gender_combobox)
+        layout.addLayout(self.measurement_layout)
+        layout.addWidget(self.done_button)
+        self.setLayout(layout)
+
+    def get_measurements(self):
+        gender = self.gender_combobox.currentText()
+        measurements = [line_edit.text() for line_edit in self.measurement_line_edits]
+        measurements.append(gender)
+        self.accept()
+        return measurements
+
+    def choose_nearest_avatar(self, get_measurements):
+        subprocess.run(
+            ["python", "choose_avatar.py", get_measurements],
+            check=True
+        )
+
+
+
+
+
+
+
 
 class UploadDialog(QDialog):
     def __init__(self, main_window, index):

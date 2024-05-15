@@ -1,4 +1,5 @@
 import csv
+import numpy as np
 
 
 def convert_strings_to_ints(lst):
@@ -57,11 +58,16 @@ for i in range(0, 10):
     converted_list.pop(0)
     converted_list.pop(0)
 
+    for j in range(0,6):
+        converted_list[j] = (converted_list[j] + converted_list[j+1]) / 2
+        converted_list.pop(j+1)
+
+
     vectors_dict[person_type_key] = converted_list
 
 
 
-print(vectors_dict)
+#print(vectors_dict)
 
     #print(convert_strings_to_ints(all_vectors[i]))
 
@@ -69,7 +75,48 @@ print(vectors_dict)
 
 
 #user input: gender, height, chest, waist, hips, inseam, weight
-example_user_input = ['Women', 170, 85, 65, 87, 79, 60]
+example_user_input = ["Man", 170, 85, 65, 87, 79, 60]
+
+def find_nearest_size(user_input, size_dict):
+    min_distance = float('inf')
+    nearest_size = None
+
+    if user_input[0] == "Woman":
+        user_input.pop(0)
+        del size_dict["Man_S"]
+        del size_dict["Man_M"]
+        del size_dict["Man_L"]
+        del size_dict["Man_XXL"]
+
+
+    if user_input[0] == "Man":
+        user_input.pop(0)
+        del size_dict["Woman_XS"]
+        del size_dict["Woman_S"]
+        del size_dict["Woman_M"]
+        del size_dict["Woman_L"]
+        del size_dict["Woman_XL"]
+
+
+
+    for size, size_vector in size_dict.items():
+      distance = np.linalg.norm(np.array(user_input) - np.array(size_vector))
+      if distance < min_distance:
+          min_distance = distance
+          nearest_size = size
+
+    #print(f"your nearest size is {nearest_size}")
+    return nearest_size
+
+
+find_nearest_size(example_user_input, vectors_dict)
+
+
+
+if __name__ == '__main__':
+    import sys
+    if len(sys.argv) > 1:
+        print(find_nearest_size(sys.argv[1], vectors_dict))
 
 
 
