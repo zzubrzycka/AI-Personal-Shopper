@@ -1,9 +1,10 @@
-import cv2
-import rembg
-import numpy as np
 import os
+import cv2
+import numpy as np
 from PIL import Image
+from PIL import ImageDraw
 import urllib.request
+from ultralytics import YOLO
 
 
 def get_project_root():
@@ -13,25 +14,19 @@ def get_project_root():
 data_dir = os.path.join(get_project_root(), "PreProcessing/images")
 
 
+def masks(image_path, output_path):
+    # Use the model
+    model = YOLO("yolov8m-seg.pt")
+    results = model.predict(image_path)
+    result = results[0]
+    masks = result.masks
+    len(masks)
+    mask1 = masks[0]
+    mask = mask1.data[0].numpy()
+    polygon = mask1.xy[0]
 
-# YOLO Model
-weights_url = "https://pjreddie.com/media/files/yolov3.weights"
-cfg_url = "https://raw.githubusercontent.com/pjreddie/darknet/master/cfg/yolov3.cfg"
-weights_path = "yolov3.weights"
-cfg_path = "yolov3.cfg"
-
-def download_yolo_model(weights_url, cfg_url, weights_path, cfg_path):
-    # Download the weights file
-    urllib.request.urlretrieve(weights_url, weights_path)
-
-    # Download the configuration file
-    urllib.request.urlretrieve(cfg_url, cfg_path)
-
-    # Load the YOLO model
-    net = cv2.dnn.readNet(weights_path, cfg_path)
-
-    return net
-
+    mask_img = Image.fromarray(mask,"I")
+    mask_img.save(output_path)
 
 
 # Remove background function (output has to be .png to support transparency)
