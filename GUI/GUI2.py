@@ -188,7 +188,7 @@ class MainWindow(QMainWindow):
         self.home_tab.setLayout(horizontal_layout)
 
     def open_popup(self, index):
-        popup = PopupDialog(self, index, self.image_label_1)
+        popup = PopupDialog(self, index)
         popup.accepted.connect(popup.close)
         popup.exec_()
 
@@ -261,6 +261,50 @@ class MainWindow(QMainWindow):
         user_image_label.setPixmap(QPixmap(target_path).scaled(100, 100, Qt.KeepAspectRatio))
         self.uploaded_images_layout.addWidget(user_image_label)
 
+    def upload_avatar(self, index, avatar_path):
+        print("jestesmy w funkcji upload avatar")
+        image_path = avatar_path
+        if image_path:
+            image_name = os.path.basename(image_path)
+            print("sciezka jest dobra")
+        else:
+            print("cos nie tak ze sciezka")
+
+        if index == 1:
+            print("mamy index=1")
+            target_path2 = os.path.join(self.user_input_image_dir, image_name)
+            print(target_path2)
+
+            for item in os.listdir(self.user_input_image_dir):
+                item_path = os.path.join(self.user_input_image_dir, item)
+                os.remove(item_path)
+
+            # shutil.rmtree(self.user_input_image_dir)
+            shutil.copy(image_path, target_path2)
+
+        if index == 2:
+            target_path2 = os.path.join(self.garment_input_image_dir, image_name)
+            print(target_path2)
+            # shutil.rmtree(self.garment_input_image_dir)
+
+            for item in os.listdir(self.garment_input_image_dir):
+                item_path = os.path.join(self.garment_input_image_dir, item)
+                os.remove(item_path)
+
+            shutil.copy(image_path, target_path2)
+
+            # Copy the image to the input_images directory
+        print("pora na zapisanie obrazka do folderu")
+        target_path = os.path.join(self.input_dir, image_name)
+        shutil.copy(image_path, target_path)
+        self.set_image_label(index, target_path)
+
+        # Add the uploaded image to the "User Images" tab
+        user_image_label = QLabel()
+        user_image_label.setPixmap(QPixmap(target_path).scaled(100, 100, Qt.KeepAspectRatio))
+        self.uploaded_images_layout.addWidget(user_image_label)
+
+
     def set_image_label(self, index, image_path):
         # Ensure the loaded image is displayed directly below the corresponding button
         pixmap = QPixmap(image_path).scaled(200, 200, Qt.KeepAspectRatio)
@@ -320,12 +364,11 @@ class MainWindow(QMainWindow):
 
 class PopupDialog(QDialog):
 
-    def __init__(self, main_window, index, image_label_1):
+    def __init__(self, main_window, index):
         super().__init__(main_window)
 
         self.main_window = main_window
         self.index = index
-        self.image_label_1 = image_label_1
 
         self.setWindowTitle("Picture source")
 
@@ -352,12 +395,17 @@ class PopupDialog(QDialog):
         self.new_pic_button.clicked.connect(self.upload_new_picture)
         self.avatars_button.clicked.connect(self.open_measurementsdialog)
 
+        self.prev_uploaded_pic_button.clicked.connect(self.close)
+        self.avatars_button.clicked.connect(self.close)
+        self.new_pic_button.clicked.connect(self.close)
+
     def upload_new_picture(self):
         self.main_window.upload_image(self.index)
         self.accept()
 
     def open_measurementsdialog(self, index):
-        popup = MeasurementsDialog(self, index)
+        popup = MeasurementsDialog(self.main_window, index)
+
         popup.exec_()
 
 
@@ -390,7 +438,7 @@ class MeasurementsDialog(QDialog):
 
         # Button to indicate measurements are done
         self.done_button = QPushButton("Send")
-        self.done_button.clicked.connect(self.get_measurements)
+        self.done_button.clicked.connect(lambda: self.get_measurements(self.index))
 
         # Layout
         layout = QVBoxLayout()
@@ -401,7 +449,7 @@ class MeasurementsDialog(QDialog):
         layout.addWidget(self.done_button)
         self.setLayout(layout)
 
-    def get_measurements(self):
+    def get_measurements(self, index):
         gender = self.gender_combobox.currentText()
         measurements = [line_edit.text() for line_edit in self.measurement_line_edits]
         measurements.insert(0, gender)
@@ -416,14 +464,9 @@ class MeasurementsDialog(QDialog):
             nearest_size = result.stdout.strip()
             print("Nearest size:", nearest_size)
 
-            avatar_path = os.path.join("avatars", nearest_size+".png")
+            avatar_path = os.path.join("avatars", nearest_size+".jpg")
             if os.path.exists(avatar_path):
-
-                pixmap = QPixmap(avatar_path)
-
-               # self.main_window.image_label_1.setPixmap(pixmap)
-                self.main_window.image_label_1.setPixmap(
-                    pixmap.scaled(self.main_window.image_label_1.size(), Qt.KeepAspectRatioByExpanding))
+                self.main_window.upload_avatar(self.index, avatar_path)
             else:
                 print("Avatar for nearest size not found:", nearest_size)
 
@@ -431,13 +474,6 @@ class MeasurementsDialog(QDialog):
 
         except Exception as e:
             print("An error occurred while running 'choose_avatar.py':", e)
-
-    def choose_nearest_avatar(self, get_measurements):
-        subprocess.run(
-            ["python", "choose_avatar.py", get_measurements],
-            check=True
-        )
-
 
 
 
