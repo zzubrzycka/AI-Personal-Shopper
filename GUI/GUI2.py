@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QH
                              QLineEdit, QFormLayout)
 from PyQt5.QtGui import QPixmap, QFont
 from PyQt5.QtCore import Qt
+from /home/user/AI-Personal-Shopper/AI-Personal-Shopper/ApplicationFlow/application_flow.py import return_final_pictures
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -329,17 +330,18 @@ class MainWindow(QMainWindow):
 
 
         # Execute the process_images.py script and save output to the output_images folder
+      #  try:
+      #      subprocess.run(
+       #         ["python", "process_images.py", self.image_1_path, self.image_2_path, output_image_path],
+        #        check=True
+         #   )
         try:
-            subprocess.run(
-                ["python", "process_images.py", self.image_1_path, self.image_2_path, output_image_path],
-                check=True
-            )
-
-            pixmap = QPixmap(output_image_path).scaled(300, 400, Qt.KeepAspectRatio)
+            output_path_from_script = return_final_pictures(self.image_1_path, self.image_2_path)
+            pixmap = QPixmap(output_path_from_script).scaled(300, 400, Qt.KeepAspectRatio)
             self.output_image_label.setPixmap(pixmap)
             # Add the output image to the "Output Images" tab
             output_label = QLabel()
-            output_label.setPixmap(QPixmap(output_image_path).scaled(200, 200, Qt.KeepAspectRatio))
+            output_label.setPixmap(QPixmap(output_path_from_script).scaled(200, 200, Qt.KeepAspectRatio))
             self.output_images_layout.addWidget(output_label)
         except Exception as e:
             QMessageBox.critical(self, "Error", f"An error occurred while processing images: {e}")
