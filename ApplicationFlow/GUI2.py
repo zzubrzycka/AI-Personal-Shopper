@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QH
                              QLineEdit, QFormLayout)
 from PyQt5.QtGui import QPixmap, QFont
 from PyQt5.QtCore import Qt
-#from AI_Personal_Shopper.ApplicationFlow.application_flow import return_final_pictures
+from application_flow import return_final_pictures
 
 class MainWindow(QMainWindow):
     def __init__(self):
