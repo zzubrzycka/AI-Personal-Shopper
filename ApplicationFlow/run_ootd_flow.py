@@ -11,7 +11,15 @@ def run_ootd(model_path, cloth_path, sample_number, category_number): #category 
 
 
 if __name__ == '__main__':
-    command = "conda run -n ootd --cwd /home/user/OOTDiffusion/run python run_ootd.py --model_path /home/user/OOTDiffusion/run/examples/model/051962_0.jpg --cloth_path /home/user/OOTDiffusion/run/examples/garment/051517_1.jpg --model_type dc --category 1 --scale 2.0 --sample 1"
+    command = """conda run 
+    -n ootd 
+    --cwd /home/user/OOTDiffusion/run python run_ootd.py 
+    --model_path /home/user/OOTDiffusion/run/examples/model/051962_0.jpg 
+    --cloth_path /home/user/OOTDiffusion/run/examples/garment/051517_1.jpg 
+    --model_type dc 
+    --category 1 
+    --scale 2.0 
+    --sample 1"""
     
     # Run the command using os.system()
     os.system(command)
