@@ -62,7 +62,7 @@ def move_first_images_by_date(start_path, end_path, n_images):
         files = os.listdir(start_path)
         
         # Filter out image files (you can adjust this based on the image file extensions you have)
-        image_files = [file for file in files if file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')) and file.lower().startswith('out')]
+        image_files = [file for file in files if (file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')) and file.lower().startswith('out'))]
         
 
         if not image_files:
@@ -115,7 +115,41 @@ def clear_directory(path):
     except Exception as e:
         print(f"An error occurred while clearing the directory: {e}")
         return False
+    
+def print_current_environment():
+    # Get the value of the CONDA_DEFAULT_ENV environment variable
+    conda_env = os.environ.get('CONDA_DEFAULT_ENV')
+    
+    if conda_env:
+        print("Current Conda environment:", conda_env)
+    else:
+        print("No Conda environment activated.")
 
+
+def find_image_path(directory):
+    # List all files in the directory
+    files = os.listdir(directory)
+    
+    # Filter out only JPG files
+    jpg_files = [f for f in files if f.lower().endswith('.jpg')]
+    
+    if len(jpg_files) == 0:
+        print("No JPG files found in the directory.")
+        return None
+    elif len(jpg_files) > 1:
+        print("More than one JPG file found in the directory. Returning the first one.")
+    
+    # Construct the full path to the JPG file
+    jpg_path = os.path.join(directory, jpg_files[0])
+    return jpg_path
+
+
+# Example usage
+if __name__ == "__main__":
+    directory_path = R"C:\\sy\\semestr6\\PAESAV\\"
+    jpg_path = find_image_path(directory_path)
+    if jpg_path:
+        print("Path to the JPG file:", jpg_path)
 
 
 

@@ -4,9 +4,10 @@ from generics import RUN_OOTD_PATH
 
 # Define the command
 
+#category nubmers are 0 upperbody, 1 lowerbody, 2 dress
+def run_ootd(model_path, cloth_path, sample_number, category_number): 
+    command = f"""conda run -n ootd --cwd {RUN_OOTD_PATH} python run_ootd.py --model_path {model_path} --cloth_path {cloth_path} --model_type dc --category {category_number} --scale 2.0 --sample {sample_number}"""
 
-def run_ootd(model_path, cloth_path, sample_number, category_number): #category nubmers are 0 upperbody, 1 lowerbody, 2 dress
-    command = f"conda run -n ootd --cwd {RUN_OOTD_PATH} python run_ootd.py --model_path {model_path} --cloth_path {cloth_path} --model_type dc --category {category_number} --scale 2.0 --sample {sample_number}"
     os.system(command)
 
 
