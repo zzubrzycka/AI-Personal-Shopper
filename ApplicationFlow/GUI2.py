@@ -240,6 +240,7 @@ class MainWindow(QMainWindow):
             #shutil.rmtree(self.user_input_image_dir)
             shutil.copy(image_path, target_path2)
             target_path = os.path.join(self.input_dir, image_name)
+            shutil.copy(image_path, target_path)
 
         if index ==2:
             target_path2 = os.path.join(self.garment_input_image_dir, image_name)
@@ -258,7 +259,7 @@ class MainWindow(QMainWindow):
         # Copy the image to the input_images directory
 
         #target_path = os.path.join(self.input_dir, image_name)
-        shutil.copy(image_path, target_path)
+
         self.set_image_label(index, target_path)
 
         # Add the uploaded image to the "User Images" tab
