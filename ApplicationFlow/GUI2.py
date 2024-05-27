@@ -48,6 +48,7 @@ class MainWindow(QMainWindow):
 
         # Ensure input and output directories exist
         self.input_dir = "input_images"
+
         self.user_input_image_dir = "user_input_image"
         self.garment_input_image_dir = "garment_input_image"
         self.output_dir = "output_images"
@@ -229,7 +230,7 @@ class MainWindow(QMainWindow):
         if index == 1:
 
             target_path2 = os.path.join(self.user_input_image_dir, image_name)
-            print(target_path2)
+           # print(target_path2)
 
             for item in os.listdir(self.user_input_image_dir):
                 item_path = os.path.join(self.user_input_image_dir, item)
@@ -238,22 +239,25 @@ class MainWindow(QMainWindow):
 
             #shutil.rmtree(self.user_input_image_dir)
             shutil.copy(image_path, target_path2)
+            target_path = os.path.join(self.input_dir, image_name)
 
         if index ==2:
             target_path2 = os.path.join(self.garment_input_image_dir, image_name)
-            print(target_path2)
+            #print(target_path2)
             #shutil.rmtree(self.garment_input_image_dir)
+
 
             for item in os.listdir(self.garment_input_image_dir):
                 item_path = os.path.join(self.garment_input_image_dir, item)
                 os.remove(item_path)
 
             shutil.copy(image_path, target_path2)
+            target_path = image_path
 
 
         # Copy the image to the input_images directory
 
-        target_path = os.path.join(self.input_dir, image_name)
+        #target_path = os.path.join(self.input_dir, image_name)
         shutil.copy(image_path, target_path)
         self.set_image_label(index, target_path)
 
