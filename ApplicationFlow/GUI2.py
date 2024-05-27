@@ -333,6 +333,7 @@ class MainWindow(QMainWindow):
         output_image_name = f"{name1}_{name2}.png"
         output_image_path = os.path.join(self.output_dir, output_image_name)
 
+        output_path_to_show = "OutPut/out_dc_0.png"
 
         # Execute the process_images.py script and save output to the output_images folder
       #  try:
@@ -342,7 +343,8 @@ class MainWindow(QMainWindow):
          #   )
         try:
             output_path_from_script = return_final_pictures(self.image_1_path, self.image_2_path)
-            pixmap = QPixmap(output_path_from_script).scaled(300, 400, Qt.KeepAspectRatio)
+            #pixmap = QPixmap(output_path_from_script).scaled(300, 400, Qt.KeepAspectRatio)
+            pixmap = QPixmap(output_path_to_show).scaled(300, 400, Qt.KeepAspectRatio)
             self.output_image_label.setPixmap(pixmap)
             # Add the output image to the "Output Images" tab
             output_label = QLabel()
