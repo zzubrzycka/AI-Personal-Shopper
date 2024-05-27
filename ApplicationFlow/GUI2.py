@@ -343,6 +343,12 @@ class MainWindow(QMainWindow):
          #   )
         try:
             output_path_from_script = return_final_pictures(self.image_1_path, self.image_2_path)
+            print(f"Output path from script: {output_path_from_script}")
+            print(f"Output path to show: {output_path_to_show}")
+
+            if not os.path.exists(output_path_to_show):
+                raise FileNotFoundError(f"Output file not found: {output_path_to_show}")
+
             #pixmap = QPixmap(output_path_from_script).scaled(300, 400, Qt.KeepAspectRatio)
             pixmap = QPixmap(output_path_to_show).scaled(300, 400, Qt.KeepAspectRatio)
             self.output_image_label.setPixmap(pixmap)
