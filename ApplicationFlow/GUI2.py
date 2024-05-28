@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QH
                              QPushButton,
                              QFileDialog, QDialog, QGridLayout, QMessageBox, QSpacerItem, QSizePolicy, QComboBox,
                              QLineEdit, QFormLayout)
-from PyQt5.QtGui import QPixmap, QFont
+from PyQt5.QtGui import QPixmap, QFont, QMovie
 from PyQt5.QtCore import Qt
 from application_flow import return_final_pictures, return_final_pictures_avatar
 
@@ -159,6 +159,14 @@ class MainWindow(QMainWindow):
         self.run_script_button.clicked.connect(self.process_images)
 
         vertical_layout3 = QVBoxLayout()
+
+        #LOADING GIF
+        self.loading_label = QLabel("")
+        self.loading_label.setAlignment(Qt.AlignCenter)
+        self.loading_label.setFixedSize(100, 100)
+        vertical_layout3.addWidget(self.loading_label, alignment=Qt.AlignHCenter)
+
+
 
         self.output_label = QLabel("Your Output:")
         self.output_label.setFont(QFont("Arial", 14, QFont.Bold))
@@ -355,6 +363,13 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(self, "Missing Images", "Please load both images before running the script.")
             return
 
+        # Show loading GIF
+        loading_gif = QMovie("loading.gif")
+        self.loading_label.setMovie(loading_gif)
+        loading_gif.start()
+
+
+
         # Extract file names without extensions
         name1 = os.path.splitext(os.path.basename(self.image_1_path))[0]
         name2 = os.path.splitext(os.path.basename(self.image_2_path))[0]
@@ -394,6 +409,9 @@ class MainWindow(QMainWindow):
             #self.output_images_layout.addWidget(output_label)
         except Exception as e:
             QMessageBox.critical(self, "Error", f"An error occurred while processing images: {e}")
+        finally:
+            loading_gif.stop()
+            self.loading_label.clear()
 
 
    # def setup_avatar_tab(self):
