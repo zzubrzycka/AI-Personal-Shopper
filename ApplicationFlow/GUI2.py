@@ -277,7 +277,9 @@ class MainWindow(QMainWindow):
             popup2 = CategoryDialog(self, 2, image_path)
             popup2.accepted.connect(popup2.close)
             popup2.exec_()
-            self.set_image_label(index, image_path)
+
+            copied_image_database_path = popup2.target_path
+            self.set_image_label(index, copied_image_database_path)
 
     def upload_avatar(self, index, avatar_path):
         print("jestesmy w funkcji upload avatar")
@@ -551,6 +553,7 @@ class CategoryDialog(QDialog):
 
         self.main_window = main_window
         self.index = index
+        self.target_path = None
 
         layout = QGridLayout()
 
@@ -561,6 +564,7 @@ class CategoryDialog(QDialog):
         # Create the confirm button
         confirm_button = QPushButton("Confirm")
         confirm_button.clicked.connect(lambda: self.confirm_selection(2, image_path))
+       # selected_category = self.confirm_selection(2, image_path)
 
 
         # Add widgets to the layout
@@ -570,12 +574,15 @@ class CategoryDialog(QDialog):
 
         self.setLayout(layout)
 
+        #return selected_category
+
     def confirm_selection(self, index, image_path):
         selected_category = self.combo_box.currentText()
         print(f"Selected category: {selected_category}")
-        target_path = f"garment_database/{selected_category}"
-        shutil.copy(image_path, target_path)
+        self.target_path = f"garment_database/{selected_category}"
+        shutil.copy(image_path, self.target_path)
         self.accept()
+        #return selected_category
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
