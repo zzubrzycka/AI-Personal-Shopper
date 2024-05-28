@@ -69,7 +69,7 @@ def return_final_pictures_avatar(model_path, garment_path):
     # print(f"Path of the image: {output_path}")
     # return output_path
 
-    return OUTPUT_GENERAL + "/out_dc_0.jpg"
+    return OUTPUT_GENERAL + "/out_dc_0.png"
 
 
 if __name__ == "__main__":
