@@ -333,7 +333,7 @@ class MainWindow(QMainWindow):
             self.image_label_2.setPixmap(pixmap)
             image_name = os.path.basename(image_path)
             self.image_2_path = f"garment_database/{image_name}"
-            print("path to image2:", image_path)
+            print("path to image2:", self.image_2_path)
 
     def process_images(self):
         # Ensure that both images are loaded before processing
