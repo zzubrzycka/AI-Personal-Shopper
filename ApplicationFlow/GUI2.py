@@ -293,7 +293,8 @@ class MainWindow(QMainWindow):
         image_path = avatar_path
         if image_path:
             image_name = os.path.basename(image_path)
-            print("sciezka jest dobra")
+            print("avatar path:", image_path)
+            print("avatar name:", image_name)
         else:
             print("cos nie tak ze sciezka")
 
@@ -511,7 +512,7 @@ class MeasurementsDialog(QDialog):
 
             avatar_path = os.path.join("avatars", nearest_size+".jpg")
             if os.path.exists(avatar_path):
-                self.main_window.upload_avatar(self.index, avatar_path)
+                self.main_window.upload_avatar(1, avatar_path)
             else:
                 print("Avatar for nearest size not found:", nearest_size)
 
