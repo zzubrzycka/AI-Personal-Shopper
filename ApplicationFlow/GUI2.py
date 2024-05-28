@@ -279,7 +279,8 @@ class MainWindow(QMainWindow):
             #pixmap = QPixmap(output_path_from_script).scaled(300, 400, Qt.KeepAspectRatio)
             pixmap = QPixmap(output_path_to_show).scaled(300, 400, Qt.KeepAspectRatio)
             self.output_image_label.setPixmap(pixmap)
-            shutil.copy(output_path_to_show, self.output_dir)
+            #shutil.copy(output_path_to_show, self.output_dir)
+            shutil.copy(output_image_path, self.output_dir)
             # Add the output image to the "Output Images" tab
             output_label = QLabel()
             output_label.setPixmap(QPixmap(output_path_from_script).scaled(200, 200, Qt.KeepAspectRatio))
