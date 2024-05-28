@@ -184,6 +184,43 @@ def find_image_path(directory):
     return jpg_path
 
 
+
+
+def copy_picture(src_path, dst_path, new_name=None):
+    """
+    Copies a picture from the given source path to the destination path with an optional new name.
+    
+    :param src_path: str, the path to the source picture file
+    :param dst_path: str, the path to the destination directory
+    :param new_name: str, optional, the new name for the copied picture
+    :return: str, the path to the copied picture in the destination directory
+    """
+    if not os.path.isfile(src_path):
+        raise FileNotFoundError(f"The source file {src_path} does not exist.")
+    
+    if not os.path.exists(dst_path):
+        os.makedirs(dst_path)
+    
+    # Get the file extension from the source file
+    file_extension = os.path.splitext(src_path)[1]
+    
+    # If a new name is provided, use it; otherwise, use the original name
+    if new_name:
+        new_name += file_extension
+    else:
+        new_name = os.path.basename(src_path)
+    
+    # Construct the full destination path
+    dst_file_path = os.path.join(dst_path, new_name)
+    
+    # Copy the file
+    shutil.copy2(src_path, dst_file_path)
+    
+    return dst_file_path
+
+
+
+
 # Example usage
 if __name__ == "__main__":
     directory_path = R"C:\\sy\\semestr6\\PAESAV\\"
