@@ -328,10 +328,12 @@ class MainWindow(QMainWindow):
         if index == 1:
             self.image_label_1.setPixmap(pixmap)
             self.image_1_path = image_path
+            print("path to image1:", image_path)
         elif index == 2:
             self.image_label_2.setPixmap(pixmap)
             image_name = os.path.basename(image_path)
             self.image_2_path = f"garment_database/{image_name}"
+            print("path to image2:", image_path)
 
     def process_images(self):
         # Ensure that both images are loaded before processing
