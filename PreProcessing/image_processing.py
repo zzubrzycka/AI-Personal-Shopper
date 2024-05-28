@@ -1,10 +1,12 @@
-import os
 import cv2
 import numpy as np
+import os
+# import tensorflow as tf
+# import tensorflow_hub as hub
+from ultralytics import YOLO
 from PIL import Image
 from PIL import ImageDraw
 import urllib.request
-from ultralytics import YOLO
 
 
 def get_project_root():
@@ -14,7 +16,41 @@ def get_project_root():
 data_dir = os.path.join(get_project_root(), "PreProcessing/images")
 
 
+'''
+def superresolution_image(image_path, model_url, output_path):
+    # Load the original image
+    img = cv2.imread(image_path)
+    image_plot = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+    # Load the super-resolution model
+    model = hub.load(model_url)
+
+    # Function to preprocess images
+    def preprocessing(img):
+        imageSize = (tf.convert_to_tensor(image_plot.shape[:-1]) // 4) * 4
+        cropped_image = tf.image.crop_to_bounding_box(
+            img, 0, 0, imageSize[0], imageSize[1])
+        preprocessed_image = tf.cast(cropped_image, tf.float32)
+        return tf.expand_dims(preprocessed_image, 0)
+
+    # Function to apply super resolution
+    def apply_superresolution(img):
+        preprocessed_image = preprocessing(img)  # Preprocess the image
+        new_image = model(preprocessed_image)  # Run the super resolution model
+        return tf.squeeze(new_image) / 255.0
+
+    # Apply super resolution to image
+    hr_image = apply_superresolution(image_plot)
+
+    # Save super resolved image
+    cv2.imwrite(output_path, cv2.cvtColor(hr_image.numpy() * 255, cv2.COLOR_RGB2BGR))
+    print("Imagen superresuelta guardada en:", output_path)
+'''
+
+
+## Instance segmentation and then paste it onto white bg 3:4
 def masks(image_path, output_path):
+  try:
     # Use the model
     model = YOLO("yolov8m-seg.pt")
     results = model.predict(image_path)
@@ -22,129 +58,60 @@ def masks(image_path, output_path):
     masks = result.masks
     len(masks)
     mask1 = masks[0]
-    mask = mask1.data[0].numpy()
+    mask = mask1.data[0].cpu().numpy()
     polygon = mask1.xy[0]
 
     mask_img = Image.fromarray(mask,"I")
     mask_img.save(output_path)
 
-
-# Remove background function (output has to be .png to support transparency)
-def removebg(image_path, output_path):
-    # Define input image
-    input_image = Image.open(image_path)
-
-    # Convert the input image to a numpy array
-    input_array = np.array(input_image)
-
-    # Remove background
-    output_array = rembg.remove(input_array)
-
-    # Convert numpy array back to image
-    output_image = Image.fromarray(output_array)
-
-    # Save output image
-    output_image.save(output_path)
-
-    # Close all OpenCV windows
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+  except Exception as e:
+    # Handle any unexpected errors
+    print(f"No person detected: {e}")
 
 
+def segmentation(image_path, masks_path, output_path):
+  try:
+    # Load the original image and the person's mask
+    img = Image.open(image_path)
+    mask_img1 = Image.open(masks_path)
 
-# Obtaining the center of the previous image
-def centercut(image_path, output_path):
-    # Load YOLO model
-    net = download_yolo_model(weights_url, cfg_url, weights_path, cfg_path)
+    # Resize the mask so that it has the same dimensions as the original image
+    mask_img1 = mask_img1.resize(img.size)
 
-    # Define input image
-    image = cv2.imread(image_path)
+    # Calculate the bounding rectangle of the person in the mask
+    bbox = mask_img1.getbbox()
 
-    # Get image dimensions
-    (height, width) = image.shape[:2]
+    if bbox is not None:
+        # Calculate the dimensions of the detected person
+        person_width = bbox[2] - bbox[0]
+        person_height = bbox[3] - bbox[1]
 
-    # Define the neural network input
-    blob = cv2.dnn.blobFromImage(image, 1 / 255.0, (416, 416), swapRB=True, crop=False)
-    net.setInput(blob)
+        # Calculate the dimensions of the white background image in a 3:4 ratio with respect to the person
+        bg_width = int(person_height* 3 / 4)
+        bg_height = person_height
 
-    # Perform forward propagation
-    output_layer_name = net.getUnconnectedOutLayersNames()
-    output_layers = net.forward(output_layer_name)
-    expansion_factor = 1.2
+        # Calculate the offset needed to center the person in the white background image
+        offset_x = int((bg_width - person_width) // 2)
+        offset_y = int((bg_height - person_height) // 2)
 
-    # Initialize list of detected people
-    people = []
+        # Create a new RGB image to store the cropped person
+        person_img = Image.new("RGB", (bg_width, bg_height), (255, 255, 255))  # Initialize with white background
 
-    # Loop over the output layers
-    for output in output_layers:
-        # Loop over the detections
-        for detection in output:
-            # Extract the class ID and confidence of the current detection
-            scores = detection[5:]
-            class_id = np.argmax(scores)
-            confidence = scores[class_id]
+        # Combine original image with transparency mask
+        for x in range(img.width):
+            for y in range(img.height):
+                pixel_value = mask_img1.getpixel((x, y))
+                if pixel_value >= 128:  # If the pixel corresponds to the person
+                    new_x = x - bbox[0] + offset_x
+                    new_y = y - bbox[1] + offset_y
+                    if 0 <= new_x < bg_width and 0 <= new_y < bg_height:
+                        person_img.putpixel((new_x, new_y), img.getpixel((x, y)))  # Keep the original color
 
-            # Only keep detections with a high confidence
-            if class_id == 0 and confidence > 0.5:
-                # Object detected
-                center_x = int(detection[0] * width)
-                center_y = int(detection[1] * height)
-                w = int(detection[2] * width)
-                h = int(detection[3] * height)
+        # Save final result
+        person_img.save(output_path)
+    else:
+        print("WARNING! No person was detected in the mask.")
 
-                # Rectangle coordinates
-                x = int(center_x - w / 2)
-                y = int(center_y - h / 2)
-
-                # Expand the bounding box by a certain factor
-                expanded_x = max(0, x - int((expansion_factor - 1) * w / 2))
-                expanded_y = max(0, y - int((expansion_factor - 1) * h / 2))
-                expanded_w = min(width - expanded_x, int(expansion_factor * w))
-                expanded_h = min(height - expanded_y, int(expansion_factor * h))
-
-                # Add the detection to the list of people
-                people.append((expanded_x, expanded_y, expanded_w, expanded_h))
-
-    # If no people detected, return original image
-    if not people:
-        print("No people detected.")
-        return
-
-    # Find the bounding box of the person with the largest area
-    (x, y, w, h) = max(people, key=lambda box: box[2] * box[3])
-
-    # Crop the image
-    cropped_image = image[y:y+h, x:x+w].copy()
-
-    # The next lines are to maintain transparency in the output picture
-    # Open the input image using Pillow to get the alpha channel
-    input_image = Image.open(image_path)
-    # Extract the alpha channel
-    alpha_channel = np.array(input_image.split()[-1])
-    # Create the cropped image with alpha channel
-    cropped_image_with_alpha = cv2.cvtColor(cropped_image, cv2.COLOR_BGR2BGRA)
-    # Set the alpha channel of the cropped image
-    cropped_image_with_alpha[:, :, 3] = alpha_channel[y:y+h, x:x+w]
-
-    # Save the result
-    cv2.imwrite(output_path, cropped_image_with_alpha)
-
-
-
-# Pasting the png "sticker" to a 3:4 aspect ratio background
-def white34(image_path, output_path):
-    # Load the PNG image with alpha channel (transparency)
-    foreground = Image.open(image_path)
-
-    # Create a new white background image with a 3:4 aspect ratio
-    new_width = foreground.height * 3 // 4
-    background = Image.new("RGB", (new_width, foreground.height), "white")
-
-    # Calculate the position to center the PNG image
-    x_offset = (new_width - foreground.width) // 2
-
-    # Paste the PNG image onto the white background
-    background.paste(foreground, (x_offset, 0), foreground)
-
-    # Save the resulting image
-    background.save(output_path)
+  except Exception as e:
+        # Handle any unexpected errors
+        print(f"No person detected: {e}")
