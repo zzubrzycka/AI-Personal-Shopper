@@ -24,21 +24,21 @@ class MainWindow(QMainWindow):
 
         # Create the tabs
         self.home_tab = QWidget()
-        self.avatar_tab = QWidget()
-        self.uploaded_images_tab = QWidget()
-        self.output_images_tab = QWidget()
+       # self.avatar_tab = QWidget()
+        #self.uploaded_images_tab = QWidget()
+        #self.output_images_tab = QWidget()
 
         # Add tabs
         self.tabs.addTab(self.home_tab, "Home")
-        self.tabs.addTab(self.avatar_tab, "Avatars")
-        self.tabs.addTab(self.uploaded_images_tab, "User Images")
-        self.tabs.addTab(self.output_images_tab, "Output Images")
+       # self.tabs.addTab(self.avatar_tab, "Avatars")
+        #self.tabs.addTab(self.uploaded_images_tab, "User Images")
+        #self.tabs.addTab(self.output_images_tab, "Output Images")
 
         # Set up content for each tab
         self.setup_home_tab()
-        self.setup_avatar_tab()
-        self.setup_uploaded_images_tab()
-        self.setup_output_images_tab()
+       # self.setup_avatar_tab()
+       # self.setup_uploaded_images_tab()
+        #self.setup_output_images_tab()
 
         # A list to store uploaded images
         self.user_uploaded_images = []
@@ -199,27 +199,27 @@ class MainWindow(QMainWindow):
 
         self.sender().close()
 
-    def setup_avatar_tab_EARLIER(self):
-        layout = QVBoxLayout()
-        layout.addWidget(QLabel("Avatars:"))
+    #def setup_avatar_tab_EARLIER(self):
+     #   layout = QVBoxLayout()
+      #  layout.addWidget(QLabel("Avatars:"))
 
         # Add placeholder avatars
-        self.avatar_images = [QLabel(f"Avatar {i}") for i in range(1, 11)]
-        for label in self.avatar_images:
-            label.setPixmap(QPixmap('placeholder.png').scaled(100, 100))
-            layout.addWidget(label)
+       # self.avatar_images = [QLabel(f"Avatar {i}") for i in range(1, 11)]
+        #for label in self.avatar_images:
+         #   label.setPixmap(QPixmap('placeholder.png').scaled(100, 100))
+          #  layout.addWidget(label)
 
-        self.avatar_tab.setLayout(layout)
+        #self.avatar_tab.setLayout(layout)
 
-    def setup_uploaded_images_tab(self):
+   # def setup_uploaded_images_tab(self):
         # Initialize a layout to hold multiple uploaded images
-        self.uploaded_images_layout = QVBoxLayout()
-        self.uploaded_images_tab.setLayout(self.uploaded_images_layout)
+        #self.uploaded_images_layout = QVBoxLayout()
+        #self.uploaded_images_tab.setLayout(self.uploaded_images_layout)
 
-    def setup_output_images_tab(self):
+   # def setup_output_images_tab(self):
         # Initialize a layout to hold multiple output images
-        self.output_images_layout = QVBoxLayout()
-        self.output_images_tab.setLayout(self.output_images_layout)
+       # self.output_images_layout = QVBoxLayout()
+        #self.output_images_tab.setLayout(self.output_images_layout)
 
     def upload_image(self, index):
         # Open a file dialog to select an image
@@ -388,22 +388,22 @@ class MainWindow(QMainWindow):
             QMessageBox.critical(self, "Error", f"An error occurred while processing images: {e}")
 
 
-    def setup_avatar_tab(self):
-        layout = QVBoxLayout()
-        layout.addWidget(QLabel("Avatars:"))
-
+   # def setup_avatar_tab(self):
+    #    layout = QVBoxLayout()
+     #   layout.addWidget(QLabel("Avatars:"))
+#
         # Load avatar images from a specified folder
-        avatar_folder = "avatars"  # Specify the folder path containing avatar images
-        avatar_images = os.listdir(avatar_folder)
+ #       avatar_folder = "avatars"  # Specify the folder path containing avatar images
+  #      avatar_images = os.listdir(avatar_folder)
 
         # Add avatar images to the layout
-        for image_name in avatar_images:
-            image_path = os.path.join(avatar_folder, image_name)
-            avatar_label = QLabel()
-            avatar_label.setPixmap(QPixmap(image_path).scaled(100, 100))  # Adjust the size as needed
-            layout.addWidget(avatar_label)
+   #     for image_name in avatar_images:
+    #        image_path = os.path.join(avatar_folder, image_name)
+     #       avatar_label = QLabel()
+       #     avatar_label.setPixmap(QPixmap(image_path).scaled(100, 100))  # Adjust the size as needed
+      #      layout.addWidget(avatar_label)
 
-        self.avatar_tab.setLayout(layout)
+        #self.avatar_tab.setLayout(layout)
 
 class PopupDialog(QDialog):
 
@@ -417,13 +417,13 @@ class PopupDialog(QDialog):
 
         self.label = QLabel("Choose the source of your picture:")
 
-        self.prev_uploaded_pic_button = QPushButton("Choose from previously uploaded pictures")
+
         self.avatars_button = QPushButton("Choose from avatars")
         self.new_pic_button = QPushButton("Upload a new picture")
 
         # Tworzymy układ przycisków
         button_layout = QHBoxLayout()
-        button_layout.addWidget(self.prev_uploaded_pic_button)
+
         button_layout.addWidget(self.avatars_button)
         button_layout.addWidget(self.new_pic_button)
 
@@ -438,7 +438,7 @@ class PopupDialog(QDialog):
         self.new_pic_button.clicked.connect(self.upload_new_picture)
         self.avatars_button.clicked.connect(self.open_measurementsdialog)
 
-        self.prev_uploaded_pic_button.clicked.connect(self.close)
+
         self.avatars_button.clicked.connect(self.close)
         self.new_pic_button.clicked.connect(self.close)
 
