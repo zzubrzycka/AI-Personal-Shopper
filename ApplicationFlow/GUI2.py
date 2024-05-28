@@ -332,7 +332,7 @@ class MainWindow(QMainWindow):
         elif index == 2:
             self.image_label_2.setPixmap(pixmap)
             image_name = os.path.basename(image_path)
-            self.image_2_path = f"garment_database/{image_name}"
+            self.image_2_path = f"/home/user/AI_Personal_Shopper/AI_Personal_Shopper/ApplicationFlow/garment_database/{image_name}"
             print("path to image2:", self.image_2_path)
 
     def process_images(self):
