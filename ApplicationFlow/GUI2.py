@@ -279,7 +279,11 @@ class MainWindow(QMainWindow):
             popup2.exec_()
 
             copied_image_database_path = popup2.target_path
-            self.set_image_label(index, copied_image_database_path)
+            last_folder_category = os.path.basename(os.path.normpath(copied_image_database_path))
+
+            if len(files) == 1:
+                image_path = os.path.join(last_folder_category, files[0])
+            self.set_image_label(index, image_path)
 
     def upload_avatar(self, index, avatar_path):
         print("jestesmy w funkcji upload avatar")
