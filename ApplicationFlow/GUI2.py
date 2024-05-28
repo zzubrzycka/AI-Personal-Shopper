@@ -166,7 +166,7 @@ class MainWindow(QMainWindow):
         self.loading_label.setMovie(self.loading_movie)
         self.loading_label.setAlignment(Qt.AlignCenter)
         self.loading_label.setFixedSize(100, 100)
-        # self.loading_label.setVisible(False)
+        self.loading_label.setVisible(True)
         vertical_layout3.addWidget(self.loading_label, alignment=Qt.AlignHCenter)
 
 
