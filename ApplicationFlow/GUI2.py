@@ -266,6 +266,7 @@ class MainWindow(QMainWindow):
 
         # Add the uploaded image to the "User Images" tab
         user_image_label = QLabel()
+
         user_image_label.setPixmap(QPixmap(target_path).scaled(100, 100, Qt.KeepAspectRatio))
         self.uploaded_images_layout.addWidget(user_image_label)
 
@@ -331,7 +332,7 @@ class MainWindow(QMainWindow):
 
     def set_image_label(self, index, image_path):
         # Ensure the loaded image is displayed directly below the corresponding button
-        pixmap = QPixmap(image_path).scaled(200, 200, Qt.KeepAspectRatio)
+        #pixmap = QPixmap(image_path).scaled(200, 200, Qt.KeepAspectRatio)
         if index == 1:
             self.image_label_1.setPixmap(pixmap)
             self.image_1_path = image_path
