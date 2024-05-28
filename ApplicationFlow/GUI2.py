@@ -277,7 +277,7 @@ class MainWindow(QMainWindow):
             popup2 = CategoryDialog(self, 2, image_path)
             popup2.accepted.connect(popup2.close)
             popup2.exec_()
-        self.set_image_label(index, target_path)
+            self.set_image_label(index, image_path)
 
     def upload_avatar(self, index, avatar_path):
         print("jestesmy w funkcji upload avatar")
