@@ -254,7 +254,8 @@ class MainWindow(QMainWindow):
                 os.remove(item_path)
 
             shutil.copy(image_path, target_path2)
-            target_path = image_path
+           # target_path = image_path
+            target_path = f"garment_database/{image_name}"
 
 
         # Copy the image to the input_images directory
