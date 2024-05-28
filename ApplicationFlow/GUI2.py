@@ -193,14 +193,7 @@ class MainWindow(QMainWindow):
         popup = PopupDialog(self, index)
         popup.accepted.connect(popup.close)
         popup.exec_()
-        if index == 2:
-            folder_path = "garment_input_image"
-            files = os.listdir(folder_path)
-            if len(files) == 1:
-                image_path = os.path.join(folder_path, files[0])
-            popup2 = CategoryDialog(2, image_path)
-            popup2.accepted.connect(popup2.close)
-            popup2.exec_()
+
 
     def closePopup(self):
 
@@ -274,6 +267,15 @@ class MainWindow(QMainWindow):
         user_image_label = QLabel()
         user_image_label.setPixmap(QPixmap(target_path).scaled(100, 100, Qt.KeepAspectRatio))
         self.uploaded_images_layout.addWidget(user_image_label)
+
+        if index == 2:
+            folder_path = "garment_input_image"
+            files = os.listdir(folder_path)
+            if len(files) == 1:
+                image_path = os.path.join(folder_path, files[0])
+            popup2 = CategoryDialog(2, image_path)
+            popup2.accepted.connect(popup2.close)
+            popup2.exec_()
 
     def upload_avatar(self, index, avatar_path):
         print("jestesmy w funkcji upload avatar")
@@ -422,6 +424,8 @@ class PopupDialog(QDialog):
         self.prev_uploaded_pic_button.clicked.connect(self.close)
         self.avatars_button.clicked.connect(self.close)
         self.new_pic_button.clicked.connect(self.close)
+
+
 
     def upload_new_picture(self):
         self.main_window.upload_image(self.index)
