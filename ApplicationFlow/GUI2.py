@@ -604,7 +604,7 @@ class CategoryDialog(QDialog):
 
         # Create the combo box with options
         self.combo_box = QComboBox()
-        self.combo_box.addItems(["topwear", "bottomwear", "dress"])
+        self.combo_box.addItems(["topwear", "bottomwear", "dresses"])
 
         # Create the confirm button
         confirm_button = QPushButton("Confirm")
