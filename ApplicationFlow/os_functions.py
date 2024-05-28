@@ -150,10 +150,10 @@ def clear_directory(path):
             else:
                 os.remove(item_path)  # Remove the file
         
-        print(f"The directory {path} has been cleared.")
+        print(f"\n The directory {path} has been cleared.")
         return True
     except Exception as e:
-        print(f"An error occurred while clearing the directory: {e}")
+        print(f"\n An error occurred while clearing the directory: {e}")
         return False
     
 def print_current_environment():
