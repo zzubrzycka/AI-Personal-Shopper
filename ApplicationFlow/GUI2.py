@@ -273,7 +273,7 @@ class MainWindow(QMainWindow):
             files = os.listdir(folder_path)
             if len(files) == 1:
                 image_path = os.path.join(folder_path, files[0])
-            popup2 = CategoryDialog(2, image_path)
+            popup2 = CategoryDialog(self, 2, image_path)
             popup2.accepted.connect(popup2.close)
             popup2.exec_()
 
