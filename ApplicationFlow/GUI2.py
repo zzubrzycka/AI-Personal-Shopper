@@ -254,8 +254,8 @@ class MainWindow(QMainWindow):
                 os.remove(item_path)
 
             shutil.copy(image_path, target_path2)
-           # target_path = image_path
-            target_path = f"garment_database/{image_name}"
+            target_path = image_path
+
 
 
         # Copy the image to the input_images directory
@@ -330,7 +330,8 @@ class MainWindow(QMainWindow):
             self.image_1_path = image_path
         elif index == 2:
             self.image_label_2.setPixmap(pixmap)
-            self.image_2_path = image_path
+            image_name = os.path.basename(image_path)
+            self.image_2_path = f"garment_database/{image_name}"
 
     def process_images(self):
         # Ensure that both images are loaded before processing
