@@ -223,8 +223,6 @@ class MainWindow(QMainWindow):
         #self.output_images_tab.setLayout(self.output_images_layout)
 
     def upload_image(self, index):
-        self.is_avatar = False
-        print("NIE UZYWAMY AVATAROW, upload_image")
 
         # Open a file dialog to select an image
         image_path, _ = QFileDialog.getOpenFileName(self, "Select an Image", "", "Images (*.png *.jpg *.jpeg *.bmp)")
@@ -456,8 +454,7 @@ class PopupDialog(QDialog):
 
 
     def upload_new_picture(self):
-        self.main_window.is_avatar = False
-        print("NIE UZYWAMY AVATAROW, upload_new_picture")
+
         self.main_window.upload_image(self.index)
         self.accept()
 
@@ -468,7 +465,6 @@ class PopupDialog(QDialog):
 
     def choose_avatar(self):
         self.main_window.is_avatar = True
-        print("UZYWAMY AVATAROW, choose_avatar")
         self.open_measurementsdialog(self.index)
         self.accept()
 
