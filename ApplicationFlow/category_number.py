@@ -8,5 +8,9 @@ def category_number(garment_path):
         category_number = "1"
     elif garment_path.startswith(DRESSES_PATH):
         category_number = "2"
+    else:
+        print("Path of the directory isn't recognized")
+        print("Default category addressed - 0 (topwear)")
+        category_number = "0"
     return category_number
 

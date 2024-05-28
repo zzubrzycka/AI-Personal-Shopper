@@ -10,6 +10,8 @@ TOPWEAR_PATH = "/home/user/AI_Personal_Shopper/AI_Personal_Shopper/ApplicationFl
 OOTD_OUTPUT_PATH = "/home/user/OOTDiffusion/run/images_output"
 PREPRO_OUTPUT_PATH = "/home/user/PreProcessing/images/final_model"
 
+OOTD_INPUT_MODEL_PATH = "/home/user/AI_Personal_Shopper/AI_Personal_Shopper/ApplicationFlow/ootd_input_picutre"
+
 MASKS_BIN = "/home/user/AI_Personal_Shopper/AI_Personal_Shopper/ApplicationFlow/masks"
 OUTPUT_GENERAL = "/home/user/AI_Personal_Shopper/AI_Personal_Shopper/ApplicationFlow/OutPut"
 
@@ -19,3 +21,6 @@ EXAMPLE_GARMENT_PATH = "/home/user/OOTDiffusion/run/examples/garment/051517_1.jp
 
 
 EXAMPLE_MODEL_PATH2_topwear = "/home/user/AI_Personal_Shopper/AI_Personal_Shopper/GUI/garment_database/topwear/00055_00.jpg"
+
+
+EXAMPLE_PREPRO_MODEL = "/home/user/PreProcessing/images/initial_model/w4.jpeg"

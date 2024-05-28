@@ -62,6 +62,46 @@ def move_first_images_by_date(start_path, end_path, n_images):
         files = os.listdir(start_path)
         
         # Filter out image files (you can adjust this based on the image file extensions you have)
+        image_files = [file for file in files if (file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')))]
+        
+
+        if not image_files:
+            print("No image files found in the folder.")
+            return None
+        
+        # Sort image files by creation date (newest first)
+        image_files.sort(key=lambda x: os.path.getctime(os.path.join(start_path, x)), reverse=True)
+        
+        # Move the first N images to the destination directory
+        for i in range(min(n_images, len(image_files))):
+            image_name = image_files[i]
+            source_path = os.path.join(start_path, image_name)
+            dest_path = os.path.join(end_path, image_name)
+            shutil.move(source_path, dest_path)
+        
+    except FileNotFoundError:
+        print("Folder not found.")
+        return None
+    except Exception as e:
+        print("An error occurred:", e)
+        return None
+
+
+def move_first_images_by_date_ootd(start_path, end_path, n_images):
+    """
+    Move between folders the first n images of a folder, sorted by date created.
+    
+    Args:
+    start_path (str): The path to the folder containing the images.
+    end_path (str): The path to the destination folder.
+    n_images (int): Number of images to be moved.
+
+    """
+    try:
+        # Get a list of all files in the folder
+        files = os.listdir(start_path)
+        
+        # Filter out image files (you can adjust this based on the image file extensions you have)
         image_files = [file for file in files if (file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')) and file.lower().startswith('out'))]
         
 
