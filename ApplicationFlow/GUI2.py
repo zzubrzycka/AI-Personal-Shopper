@@ -430,13 +430,13 @@ class PopupDialog(QDialog):
         self.avatars_button = QPushButton("Choose from avatars")
         self.new_pic_button = QPushButton("Upload a new picture")
 
-        # Tworzymy układ przycisków
+
         button_layout = QHBoxLayout()
 
         button_layout.addWidget(self.avatars_button)
         button_layout.addWidget(self.new_pic_button)
 
-        # Tworzymy układ główny
+
         layout = QVBoxLayout()
         layout.addWidget(self.label)
         layout.addLayout(button_layout)
@@ -454,6 +454,7 @@ class PopupDialog(QDialog):
 
 
     def upload_new_picture(self):
+        self.main_window.is_avatar = False
         self.main_window.upload_image(self.index)
         self.accept()
 
@@ -463,10 +464,9 @@ class PopupDialog(QDialog):
         popup.exec_()
 
     def choose_avatar(self):
-        if __name__ == '__main__':
-            self.main_window.is_avatar = True
-            self.open_measurementsdialog(self.index)
-            self.accept()
+        self.main_window.is_avatar = True
+        self.open_measurementsdialog(self.index)
+        self.accept()
 
 
 class MeasurementsDialog(QDialog):
