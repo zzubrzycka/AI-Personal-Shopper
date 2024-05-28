@@ -265,9 +265,9 @@ class MainWindow(QMainWindow):
         self.set_image_label(index, target_path)
 
         # Add the uploaded image to the "User Images" tab
-        user_image_label = QLabel()
-        user_image_label.setPixmap(QPixmap(target_path).scaled(100, 100, Qt.KeepAspectRatio))
-        self.uploaded_images_layout.addWidget(user_image_label)
+        #user_image_label = QLabel()
+       # user_image_label.setPixmap(QPixmap(target_path).scaled(100, 100, Qt.KeepAspectRatio))
+       # self.uploaded_images_layout.addWidget(user_image_label)
 
         if index == 2:
             folder_path = "garment_input_image"
@@ -327,9 +327,9 @@ class MainWindow(QMainWindow):
         self.set_image_label(index, target_path)
 
         # Add the uploaded image to the "User Images" tab
-        user_image_label = QLabel()
-        user_image_label.setPixmap(QPixmap(target_path).scaled(100, 100, Qt.KeepAspectRatio))
-        self.uploaded_images_layout.addWidget(user_image_label)
+       # user_image_label = QLabel()
+      #  user_image_label.setPixmap(QPixmap(target_path).scaled(100, 100, Qt.KeepAspectRatio))
+       # self.uploaded_images_layout.addWidget(user_image_label)
 
 
     def set_image_label(self, index, image_path):
@@ -381,9 +381,9 @@ class MainWindow(QMainWindow):
             #shutil.copy(output_path_to_show, self.output_dir)
             shutil.copy(output_path_to_show, output_image_path)
             # Add the output image to the "Output Images" tab
-            output_label = QLabel()
-            output_label.setPixmap(QPixmap(output_path_from_script).scaled(200, 200, Qt.KeepAspectRatio))
-            self.output_images_layout.addWidget(output_label)
+            #output_label = QLabel()
+            #output_label.setPixmap(QPixmap(output_path_from_script).scaled(200, 200, Qt.KeepAspectRatio))
+            #self.output_images_layout.addWidget(output_label)
         except Exception as e:
             QMessageBox.critical(self, "Error", f"An error occurred while processing images: {e}")
 
