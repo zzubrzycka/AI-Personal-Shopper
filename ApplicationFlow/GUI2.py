@@ -16,8 +16,9 @@ class MainWindow(QMainWindow):
         self.is_avatar = False
 
         # Set up main window properties
-        self.setWindowTitle("Welcome to AI Personal Shopper!")
+        self.setWindowTitle("AI Personal Shopper")
         self.setGeometry(100, 100, 1250, 600)
+        self.setStyleSheet("background-color: #f5f6f1;")  # Soft gray background
 
         # Tab widget
         self.tabs = QTabWidget()
@@ -63,50 +64,18 @@ class MainWindow(QMainWindow):
         # Left side: title and instructions
         vertical_layout1 = QVBoxLayout()
 
-        title = QLabel("Welcome to AI Personal Shopper!")
-        title_font = QFont("Arial", 20, QFont.Bold)
-        title.setFont(title_font)
-        vertical_layout1.addWidget(title)
+       
 
-        introduction_text = """
-                <p>Explore our virtual fitting room designed to make your fashion journey effortless and fun. Here's what you'll find:</p>
-                <ul>
-                    <li><b>Home:</b> Upload your own images to try on clothing items virtually. Select two images, blend them, and preview your new look!</li>
-                    <li><b>Avatars:</b> Access a collection of ready-to-use avatars for virtual fitting. Choose one and see how it enhances your style.</li>
-                    <li><b>User Images:</b> Browse previously uploaded images for easy access and reuse. Quickly apply them to new clothing combinations.</li>
-                    <li><b>Output Images:</b> View all your virtual fitting results in one place. Admire the blended images generated through our application.</li>
-                </ul>
-                <br>
-                <br>
-                <p>
-                How to use our app:
-                    <ol type="1">
-                    <li>Upload a picture of yourself by clicking the first button.</li>
-                    <li>Upload the picture of the clothing by clicking the second button.</li>
-                    <li>Click the "Try it on!" button.</li>
-                    <li>View the results.</li>
-                    </ol>
-                </p>
-                
-                <br>
-                <p>Get started and discover the future of fashion with <br>AI Personal Shopper!</p>
-                """
-
-        introduction = QLabel(introduction_text)
-        introduction_font = QFont("Arial", 12)
-        introduction.setMinimumWidth(350)
-        introduction.setFont(introduction_font)
-        introduction.setWordWrap(True)
-        vertical_layout1.addWidget(introduction)
-        vertical_layout1.addSpacing(50)
-
-        instructions = QLabel("Instructions:\n\n1. Upload a picture of yourself by clicking the first button.\n2. Upload the picture of the clothing by clicking the second button.\n3. Click the 'Try it on!' button\n4. View the results.")
-        instructions_font = QFont("Arial", 12)
-        instructions.setMaximumWidth(350)
-        instructions.setFont(instructions_font)
-        instructions.setWordWrap(True)
-        #vertical_layout1.addWidget(instructions)
-
+        # Load and display the guide image
+        guide_image = QLabel()
+        guide_image_path = "guide.png"
+        pixmap = QPixmap(guide_image_path)
+        if pixmap.isNull():
+            print("Failed to load guide image.")
+        else:
+            guide_image.setPixmap(pixmap.scaled(675, 900, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+        vertical_layout1.addWidget(guide_image)     
+        vertical_layout1.addSpacing(20)
 
         # Right side: image loading
         images_layout = QVBoxLayout()
@@ -114,14 +83,24 @@ class MainWindow(QMainWindow):
         # Button and image label for the first image
         images_layout.addSpacing(20)
         self.upload_button_1 = QPushButton("1. Upload a picture of yourself")
-        self.upload_button_1.setStyleSheet("font-size: 17px;")
+        self.upload_button_1.setStyleSheet("QPushButton {"
+            "font-size: 16px;"
+            "background-color: #ec98b8;"  
+            "color: black;"
+            "border-radius: 5px;"
+            "padding: 12px;"
+            "margin: 5px;"
+            "}"
+            "QPushButton:hover {"
+            "background-color: #f7b3cc;"
+            "}")
         self.upload_button_1.setMinimumWidth(300)
         self.upload_button_1.setMinimumHeight(40)
         self.image_label_1 = QLabel("No Image Loaded")
         self.image_label_1.setAlignment(Qt.AlignCenter)
         self.image_label_1.setFixedSize(250, 250)
        # self.image_label_1.setAlignment(Qt.AlignCenter)
-        self.image_label_1.setStyleSheet("border: 2px solid black")
+        self.image_label_1.setStyleSheet("border: 1px solid #ccc;")
         images_layout.addWidget(self.upload_button_1, alignment=Qt.AlignHCenter)
         images_layout.addWidget(self.image_label_1, alignment=Qt.AlignHCenter)
 
@@ -130,21 +109,40 @@ class MainWindow(QMainWindow):
 
         # Button and image label for the second image
         self.upload_button_2 = QPushButton("2. Upload the picture of the clothing")
-        self.upload_button_2.setStyleSheet("font-size: 17px;")
+        self.upload_button_2.setStyleSheet( "QPushButton {"
+            "font-size: 16px;"
+            "background-color: #ec98b8;"  
+            "color: black;"
+            "border-radius: 5px;"
+            "padding: 12px;"
+            "margin: 5px;"
+            "}"
+            "QPushButton:hover {"
+            "background-color: #f7b3cc;"
+            "}")
 
         self.upload_button_2.setMinimumWidth(300)
         self.upload_button_2.setMinimumHeight(40)
         self.image_label_2 = QLabel("No Image Loaded")
         self.image_label_2.setAlignment(Qt.AlignCenter)
         self.image_label_2.setFixedSize(250, 250)
-        self.image_label_2.setStyleSheet("border: 2px solid black")
+        self.image_label_2.setStyleSheet("border: 1px solid #ccc;")
         images_layout.addWidget(self.upload_button_2, alignment=Qt.AlignHCenter)
         images_layout.addWidget(self.image_label_2, alignment=Qt.AlignHCenter)
         images_layout.addSpacing(40)
 
         # "Run script" button to process the images
         self.run_script_button = QPushButton("3. Try it on!")
-        self.run_script_button.setStyleSheet("background-color: green; color: white; font-size: 26px;")
+        self.run_script_button.setStyleSheet("QPushButton {"
+            "background-color: #4CAF50;"
+            "color: white;"
+            "border-radius: 10px;"
+            "font-size: 18px;"
+            "padding: 10px;"
+            "}"
+            "QPushButton:hover {"
+            "background-color: #45a049;"
+            "}")
         self.run_script_button.setMinimumHeight(50)
         self.run_script_button.setFixedWidth(250)
         images_layout.addWidget(self.run_script_button, alignment=Qt.AlignHCenter)
@@ -170,12 +168,12 @@ class MainWindow(QMainWindow):
         #self.output_image_label.setMinimumHeight(300)
         #self.output_image_label.setMinimumWidth(250)
         self.output_image_label.setFixedSize(300, 400)
-        self.output_image_label.setStyleSheet("border: 3px solid black")
+        self.output_image_label.setStyleSheet("border: 1px solid #ccc;")
 
-        vertical_layout3.addSpacing(100)
+        vertical_layout3.addSpacing(150)
         vertical_layout3.addWidget(self.output_label, alignment=Qt.AlignHCenter)
         vertical_layout3.addWidget(self.output_image_label, alignment=Qt.AlignHCenter)
-        vertical_layout3.addSpacing(150)
+        vertical_layout3.addSpacing(260)
 
         # Set stretch to control the relative space
         vertical_layout3.setStretch(0, 1)  # Adjust the stretch factor of the label
@@ -423,13 +421,36 @@ class PopupDialog(QDialog):
         self.index = index
 
         self.setWindowTitle("Picture source")
-
+        self.setStyleSheet("background-color: #f5f5f5;")  # Consistent background color with the main window
         self.label = QLabel("Choose the source of your picture:")
 
 
         self.avatars_button = QPushButton("Choose from avatars")
         self.new_pic_button = QPushButton("Upload a new picture")
-
+    	
+        
+        self.avatars_button.setStyleSheet("QPushButton {"
+            "font-size: 16px;"
+            "background-color: #ec98b8;"  
+            "color: black;"
+            "border-radius: 5px;"
+            "padding: 12px;"
+            "margin: 5px;"
+            "}"
+            "QPushButton:hover {"
+            "background-color: #f7b3cc;"
+            "}")
+        self.new_pic_button.setStyleSheet("QPushButton {"
+            "font-size: 16px;"
+            "background-color: #ec98b8;"  
+            "color: black;"
+            "border-radius: 5px;"
+            "padding: 12px;"
+            "margin: 5px;"
+            "}"
+            "QPushButton:hover {"
+            "background-color: #f7b3cc;"
+            "}")
 
         button_layout = QHBoxLayout()
 
