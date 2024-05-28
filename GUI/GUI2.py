@@ -276,7 +276,8 @@ class PopupDialog(QDialog):
         self.index = index
         self.setWindowTitle("Picture source")
         self.setStyleSheet("background-color: #f5f5f5;")  # Consistent background color with the main window
-
+        self.label = QLabel("Choose the source of your picture:")
+        
         # Setup labels and buttons
         self.label = QLabel("Choose the source of your picture:")
         self.label.setFont(QFont("Arial", 12))  # Optional: Set font here if needed
