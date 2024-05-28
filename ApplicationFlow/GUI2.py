@@ -284,6 +284,8 @@ class MainWindow(QMainWindow):
             if len(files) == 1:
                 image_path = os.path.join(last_folder_category, files[0])
             self.set_image_label(index, image_path)
+            pixmap = QPixmap(image_path).scaled(200, 200, Qt.KeepAspectRatio)
+            self.image_label_2.setPixmap(pixmap)
 
     def upload_avatar(self, index, avatar_path):
         print("jestesmy w funkcji upload avatar")
@@ -332,12 +334,13 @@ class MainWindow(QMainWindow):
     def set_image_label(self, index, image_path):
         # Ensure the loaded image is displayed directly below the corresponding button
         pixmap = QPixmap(image_path).scaled(200, 200, Qt.KeepAspectRatio)
+
         if index == 1:
             self.image_label_1.setPixmap(pixmap)
             self.image_1_path = image_path
             print("path to image1:", image_path)
         elif index == 2:
-            #self.image_label_2.setPixmap(pixmap)
+            self.image_label_2.setPixmap(pixmap)
             image_name = os.path.basename(image_path)
             last_folder = os.path.basename(os.path.dirname(image_path))
             self.image_2_path = f"/home/user/AI_Personal_Shopper/AI_Personal_Shopper/ApplicationFlow/garment_database/{last_folder}/{image_name}"
