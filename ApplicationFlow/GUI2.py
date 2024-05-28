@@ -284,7 +284,8 @@ class MainWindow(QMainWindow):
             if len(files) == 1:
                 image_path = os.path.join(last_folder_category, files[0])
             self.set_image_label(index, image_path)
-            pixmap = QPixmap(image_path).scaled(200, 200, Qt.KeepAspectRatio)
+
+            pixmap = QPixmap(target_path).scaled(200, 200, Qt.KeepAspectRatio)
             self.image_label_2.setPixmap(pixmap)
 
     def upload_avatar(self, index, avatar_path):
