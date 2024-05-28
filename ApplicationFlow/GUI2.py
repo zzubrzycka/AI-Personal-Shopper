@@ -8,11 +8,12 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QH
                              QLineEdit, QFormLayout)
 from PyQt5.QtGui import QPixmap, QFont
 from PyQt5.QtCore import Qt
-from application_flow import return_final_pictures
+from application_flow import return_final_pictures, return_final_pictures_avatar
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.is_avatar = False
 
         # Set up main window properties
         self.setWindowTitle("Welcome to AI Personal Shopper!")
@@ -222,6 +223,8 @@ class MainWindow(QMainWindow):
         #self.output_images_tab.setLayout(self.output_images_layout)
 
     def upload_image(self, index):
+        self.is_avatar = False
+
         # Open a file dialog to select an image
         image_path, _ = QFileDialog.getOpenFileName(self, "Select an Image", "", "Images (*.png *.jpg *.jpeg *.bmp)")
         print(image_path)
@@ -289,17 +292,16 @@ class MainWindow(QMainWindow):
             self.image_label_2.setPixmap(pixmap)
 
     def upload_avatar(self, index, avatar_path):
-        print("jestesmy w funkcji upload avatar")
+        self.is_avatar = True
         image_path = avatar_path
         if image_path:
             image_name = os.path.basename(image_path)
             print("avatar path:", image_path)
             print("avatar name:", image_name)
         else:
-            print("cos nie tak ze sciezka")
+            print("The path to the avatar is not right.")
 
         if index == 1:
-            print("mamy index=1")
             target_path2 = os.path.join(self.user_input_image_dir, image_name)
             print(target_path2)
 
@@ -322,7 +324,7 @@ class MainWindow(QMainWindow):
             shutil.copy(image_path, target_path2)
 
             # Copy the image to the input_images directory
-        print("pora na zapisanie obrazka do folderu")
+
         target_path = os.path.join(self.input_dir, image_name)
         shutil.copy(image_path, target_path)
         self.set_image_label(index, target_path)
@@ -369,7 +371,13 @@ class MainWindow(QMainWindow):
         #        check=True
          #   )
         try:
-            output_path_from_script = return_final_pictures(self.image_1_path, self.image_2_path)
+            if self.is_avatar:
+                output_path_from_script = return_final_pictures_avatar(self.image_1_path, self.image_2_path)
+                print("we're using avatars function")
+            else:
+                output_path_from_script = return_final_pictures(self.image_1_path, self.image_2_path)
+                print("we're using the normal function")
+
             print(f"Output path from script: {output_path_from_script}")
             print(f"Output path to show: {output_path_to_show}")
 
@@ -437,8 +445,8 @@ class PopupDialog(QDialog):
 
 
         self.new_pic_button.clicked.connect(self.upload_new_picture)
-        self.avatars_button.clicked.connect(self.open_measurementsdialog)
-
+        #self.avatars_button.clicked.connect(self.open_measurementsdialog)
+        self.avatars_button.clicked.connect(self.choose_avatar)
 
         self.avatars_button.clicked.connect(self.close)
         self.new_pic_button.clicked.connect(self.close)
@@ -454,6 +462,11 @@ class PopupDialog(QDialog):
 
         popup.exec_()
 
+    def choose_avatar(self):
+        if __name__ == '__main__':
+            self.main_window.is_avatar = True
+            self.open_measurementsdialog(self.index)
+            self.accept()
 
 
 class MeasurementsDialog(QDialog):
