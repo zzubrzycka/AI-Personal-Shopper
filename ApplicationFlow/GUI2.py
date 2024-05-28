@@ -193,6 +193,14 @@ class MainWindow(QMainWindow):
         popup = PopupDialog(self, index)
         popup.accepted.connect(popup.close)
         popup.exec_()
+        if index == 2:
+            folder_path = "garment_input_image"
+            files = os.listdir(folder_path)
+            if len(files) == 1:
+                image_path = os.path.join(folder_path, files[0])
+            popup2 = CategoryDialog(2, image_path)
+            popup2.accepted.connect(popup2.close)
+            popup2.exec_()
 
     def closePopup(self):
 
@@ -523,6 +531,40 @@ class UploadDialog(QDialog):
 
     def select_own_image(self):
         self.main_window.upload_image(self.index)
+        self.accept()
+
+
+ #okienko do wyboru kategorii
+class CategoryDialog(QDialog):
+    def __init__(self, main_window, index, image_path):
+        super().__init__(main_window)
+
+        self.main_window = main_window
+        self.index = index
+
+        layout = QGridLayout()
+
+        # Create the combo box with options
+        self.combo_box = QComboBox()
+        self.combo_box.addItems(["topwear", "bottomwear", "dress"])
+
+        # Create the confirm button
+        confirm_button = QPushButton("Confirm")
+        confirm_button.clicked.connect(lambda: self.confirm_selection(2, image_path))
+
+
+        # Add widgets to the layout
+        layout.addWidget(QLabel("Choose the category of your garment:"), 0, 0, 1, 2)
+        layout.addWidget(self.combo_box, 1, 0, 1, 2)
+        layout.addWidget(confirm_button, 2, 0, 1, 2)
+
+        self.setLayout(layout)
+
+    def confirm_selection(self, index, image_path):
+        selected_category = self.combo_box.currentText()
+        print(f"Selected category: {selected_category}")
+        target_path = f"garment_database/{selected_category}"
+        shutil.copy(image_path, target_path)
         self.accept()
 
 if __name__ == "__main__":
