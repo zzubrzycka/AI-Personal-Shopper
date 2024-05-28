@@ -17,7 +17,7 @@ class MainWindow(QMainWindow):
 
         # Set up main window properties
         self.setWindowTitle("AI Personal Shopper")
-        self.setGeometry(100, 100, 1250, 600)
+        self.setGeometry(100, 100, 1250, 450)
         self.setStyleSheet("background-color: #f5f6f1;")  # Soft gray background
 
         # Tab widget
@@ -161,9 +161,12 @@ class MainWindow(QMainWindow):
         vertical_layout3 = QVBoxLayout()
 
         #LOADING GIF
-        self.loading_label = QLabel("")
+        self.loading_label = QLabel()
+        self.loading_movie = QMovie("loading.gif")
+        self.loading_label.setMovie(self.loading_movie)
         self.loading_label.setAlignment(Qt.AlignCenter)
         self.loading_label.setFixedSize(100, 100)
+        # self.loading_label.setVisible(False)
         vertical_layout3.addWidget(self.loading_label, alignment=Qt.AlignHCenter)
 
 
@@ -201,6 +204,15 @@ class MainWindow(QMainWindow):
         popup = PopupDialog(self, index)
         popup.accepted.connect(popup.close)
         popup.exec_()
+
+    def start_loading(self):
+        self.loading_label.setVisible(True)
+        self.loading_movie.start()
+
+    def stop_loading(self):
+        self.loading_movie.stop()
+        self.loading_label.setVisible(False)
+
 
 
     def closePopup(self):
@@ -364,9 +376,7 @@ class MainWindow(QMainWindow):
             return
 
         # Show loading GIF
-        loading_gif = QMovie("loading.gif")
-        self.loading_label.setMovie(loading_gif)
-        loading_gif.start()
+        self.start_loading()
 
 
 
@@ -410,8 +420,7 @@ class MainWindow(QMainWindow):
         except Exception as e:
             QMessageBox.critical(self, "Error", f"An error occurred while processing images: {e}")
         finally:
-            loading_gif.stop()
-            self.loading_label.clear()
+            self.stop_loading()
 
 
    # def setup_avatar_tab(self):
