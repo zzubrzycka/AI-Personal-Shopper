@@ -381,7 +381,7 @@ class MainWindow(QMainWindow):
             return
 
         # Show loading GIF
-        #self.loading_text_label.setVisible(True)
+        self.loading_text_label.setVisible(True)
 
 
 
