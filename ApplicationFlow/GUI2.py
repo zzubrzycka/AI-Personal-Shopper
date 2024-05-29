@@ -39,6 +39,13 @@ class MainWindow(QMainWindow):
         #self.tabs.addTab(self.output_images_tab, "Output Images")
 
         # Set up content for each tab
+        self.loading_label = QLabel()
+
+        self.loading_movie = QMovie("loading.gif")
+        self.loading_label.setMovie(self.loading_movie)
+        self.loading_label.setAlignment(Qt.AlignCenter)
+        self.loading_label.setFixedSize(300, 300)
+        self.loading_label.setVisible(False)
         self.setup_home_tab()
        # self.setup_avatar_tab()
        # self.setup_uploaded_images_tab()
@@ -58,6 +65,9 @@ class MainWindow(QMainWindow):
         self.output_dir = "output_images"
         os.makedirs(self.input_dir, exist_ok=True)
         os.makedirs(self.output_dir, exist_ok=True)
+
+
+
 
     def setup_home_tab(self):
         # Create a horizontal layout to separate left and right sections
@@ -158,18 +168,11 @@ class MainWindow(QMainWindow):
       #  self.upload_button_2.clicked.connect(lambda: self.open_popup(2))
         self.upload_button_2.clicked.connect(lambda: self.upload_image(2))
 
+        self.run_script_button.clicked.connect(self.start_loading)
         self.run_script_button.clicked.connect(self.process_images)
 
         vertical_layout3 = QVBoxLayout()
 
-        #LOADING GIF
-        self.loading_label = QLabel()
-        self.loading_movie = QMovie("/AI_Personal_Shopper/AI_Personal_Shopper/ApplicationFlow/loading.gif")
-        self.loading_label.setMovie(self.loading_movie)
-        self.loading_label.setAlignment(Qt.AlignCenter)
-        self.loading_label.setFixedSize(100, 100)
-        self.loading_label.setVisible(True)
-        vertical_layout3.addWidget(self.loading_label, alignment=Qt.AlignHCenter)
 
 
 
@@ -185,6 +188,8 @@ class MainWindow(QMainWindow):
         self.output_image_label.setStyleSheet("border: 1px solid #ccc;")
 
         vertical_layout3.addSpacing(150)
+        vertical_layout3.addWidget(self.loading_label, alignment=Qt.AlignHCenter)
+
         vertical_layout3.addWidget(self.output_label, alignment=Qt.AlignHCenter)
         vertical_layout3.addWidget(self.output_image_label, alignment=Qt.AlignHCenter)
         vertical_layout3.addSpacing(150)
@@ -378,7 +383,7 @@ class MainWindow(QMainWindow):
             return
 
         # Show loading GIF
-        self.start_loading()
+      #  self.start_loading()
 
 
 
