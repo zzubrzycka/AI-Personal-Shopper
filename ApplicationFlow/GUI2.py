@@ -22,6 +22,8 @@ class MainWindow(QMainWindow):
         self.setGeometry(0, 0, 800, 500)
         self.setStyleSheet("background-color: #ffffff;")  # Soft gray background
 
+        self.loading_text_label = QLabel("Your output is loading...")
+
         # Tab widget
         self.tabs = QTabWidget()
         self.setCentralWidget(self.tabs)
@@ -162,12 +164,12 @@ class MainWindow(QMainWindow):
       #  self.upload_button_2.clicked.connect(lambda: self.open_popup(2))
         self.upload_button_2.clicked.connect(lambda: self.upload_image(2))
 
-      #  self.run_script_button.clicked.connect(self.start_loading)
+        #self.run_script_button.clicked.connect(self.loading_text_label.setVisible(True))
         self.run_script_button.clicked.connect(self.process_images)
 
         vertical_layout3 = QVBoxLayout()
 
-        self.loading_text_label = QLabel("Your output is loading...")
+
         self.loading_text_label.setAlignment(Qt.AlignCenter)
         self.loading_text_label.setVisible(False)
 
