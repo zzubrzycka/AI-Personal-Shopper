@@ -1,3 +1,5 @@
+
+
 import sys
 import os
 import shutil
@@ -17,8 +19,8 @@ class MainWindow(QMainWindow):
 
         # Set up main window properties
         self.setWindowTitle("AI Personal Shopper")
-        self.setGeometry(100, 100, 1250, 450)
-        self.setStyleSheet("background-color: #f5f6f1;")  # Soft gray background
+        self.setGeometry(0, 0, 800, 500)
+        self.setStyleSheet("background-color: #ffffff;")  # Soft gray background
 
         # Tab widget
         self.tabs = QTabWidget()
@@ -73,23 +75,23 @@ class MainWindow(QMainWindow):
         if pixmap.isNull():
             print("Failed to load guide image.")
         else:
-            guide_image.setPixmap(pixmap.scaled(675, 900, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+            guide_image.setPixmap(pixmap.scaled(540, 720, Qt.KeepAspectRatio, Qt.SmoothTransformation))
         vertical_layout1.addWidget(guide_image)     
-        vertical_layout1.addSpacing(20)
+        vertical_layout1.addSpacing(-10)
 
         # Right side: image loading
         images_layout = QVBoxLayout()
 
         # Button and image label for the first image
-        images_layout.addSpacing(20)
+        images_layout.addSpacing(-10)
         self.upload_button_1 = QPushButton("1. Upload a picture of yourself")
         self.upload_button_1.setStyleSheet("QPushButton {"
             "font-size: 16px;"
             "background-color: #ec98b8;"  
             "color: black;"
             "border-radius: 5px;"
-            "padding: 12px;"
-            "margin: 5px;"
+            "padding: 1px;"
+            "margin: 1px;"
             "}"
             "QPushButton:hover {"
             "background-color: #f7b3cc;"
@@ -98,24 +100,24 @@ class MainWindow(QMainWindow):
         self.upload_button_1.setMinimumHeight(40)
         self.image_label_1 = QLabel("No Image Loaded")
         self.image_label_1.setAlignment(Qt.AlignCenter)
-        self.image_label_1.setFixedSize(250, 250)
+        self.image_label_1.setFixedSize(240, 240)
        # self.image_label_1.setAlignment(Qt.AlignCenter)
         self.image_label_1.setStyleSheet("border: 1px solid #ccc;")
         images_layout.addWidget(self.upload_button_1, alignment=Qt.AlignHCenter)
         images_layout.addWidget(self.image_label_1, alignment=Qt.AlignHCenter)
 
         # Add some extra vertical space
-        images_layout.addSpacing(40)
+        images_layout.addSpacing(5)
 
         # Button and image label for the second image
-        self.upload_button_2 = QPushButton("2. Upload the picture of the clothing")
+        self.upload_button_2 = QPushButton("2. Upload the clothing picture")
         self.upload_button_2.setStyleSheet( "QPushButton {"
             "font-size: 16px;"
             "background-color: #ec98b8;"  
             "color: black;"
             "border-radius: 5px;"
-            "padding: 12px;"
-            "margin: 5px;"
+            "padding: 1px;"
+            "margin: 1px;"
             "}"
             "QPushButton:hover {"
             "background-color: #f7b3cc;"
@@ -125,28 +127,28 @@ class MainWindow(QMainWindow):
         self.upload_button_2.setMinimumHeight(40)
         self.image_label_2 = QLabel("No Image Loaded")
         self.image_label_2.setAlignment(Qt.AlignCenter)
-        self.image_label_2.setFixedSize(250, 250)
+        self.image_label_2.setFixedSize(240, 240)
         self.image_label_2.setStyleSheet("border: 1px solid #ccc;")
         images_layout.addWidget(self.upload_button_2, alignment=Qt.AlignHCenter)
         images_layout.addWidget(self.image_label_2, alignment=Qt.AlignHCenter)
-        images_layout.addSpacing(40)
+        images_layout.addSpacing(5)
 
         # "Run script" button to process the images
         self.run_script_button = QPushButton("3. Try it on!")
         self.run_script_button.setStyleSheet("QPushButton {"
             "background-color: #4CAF50;"
             "color: white;"
-            "border-radius: 10px;"
+            "border-radius: 5px;"
             "font-size: 18px;"
-            "padding: 10px;"
+            "padding: 1px;"
             "}"
             "QPushButton:hover {"
             "background-color: #45a049;"
             "}")
-        self.run_script_button.setMinimumHeight(50)
+        self.run_script_button.setMinimumHeight(40)
         self.run_script_button.setFixedWidth(250)
         images_layout.addWidget(self.run_script_button, alignment=Qt.AlignHCenter)
-        images_layout.addSpacing(25)
+        images_layout.addSpacing(10)
 
         # Connect button actions
        # self.upload_button_1.clicked.connect(lambda: self.upload_image(1))
@@ -162,7 +164,7 @@ class MainWindow(QMainWindow):
 
         #LOADING GIF
         self.loading_label = QLabel()
-        self.loading_movie = QMovie("loading.gif")
+        self.loading_movie = QMovie("/AI_Personal_Shopper/AI_Personal_Shopper/ApplicationFlow/loading.gif")
         self.loading_label.setMovie(self.loading_movie)
         self.loading_label.setAlignment(Qt.AlignCenter)
         self.loading_label.setFixedSize(100, 100)
@@ -185,16 +187,16 @@ class MainWindow(QMainWindow):
         vertical_layout3.addSpacing(150)
         vertical_layout3.addWidget(self.output_label, alignment=Qt.AlignHCenter)
         vertical_layout3.addWidget(self.output_image_label, alignment=Qt.AlignHCenter)
-        vertical_layout3.addSpacing(260)
+        vertical_layout3.addSpacing(150)
 
         # Set stretch to control the relative space
-        vertical_layout3.setStretch(0, 1)  # Adjust the stretch factor of the label
-        vertical_layout3.setStretch(1, 3)  # Adjust the stretch factor of the image
+	# vertical_layout3.setStretch(0, 1)  # Adjust the stretch factor of the label
+        # vertical_layout3.setStretch(1, 3)  # Adjust the stretch factor of the image
 
         horizontal_layout.addLayout(vertical_layout1)
         horizontal_layout.addLayout(images_layout)
 
-        horizontal_layout.setStretch(1, 500)
+        horizontal_layout.setStretch(1, 50)
         horizontal_layout.addLayout(vertical_layout3)
 
         #horizontal_layout.addLayout(vertical_layout3)
@@ -661,3 +663,4 @@ if __name__ == "__main__":
     window = MainWindow()
     window.show()
     sys.exit(app.exec_())
+
