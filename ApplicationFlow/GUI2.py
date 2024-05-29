@@ -164,7 +164,7 @@ class MainWindow(QMainWindow):
       #  self.upload_button_2.clicked.connect(lambda: self.open_popup(2))
         self.upload_button_2.clicked.connect(lambda: self.upload_image(2))
 
-        self.run_script_button.clicked.connect(self.loading_text_label.setVisible(True))
+        self.run_script_button.clicked.connect(self.start_loading)
         self.run_script_button.clicked.connect(self.process_images)
 
         vertical_layout3 = QVBoxLayout()
@@ -210,8 +210,8 @@ class MainWindow(QMainWindow):
         popup.accepted.connect(popup.close)
         popup.exec_()
 
-    #def start_loading(self):
-     #   self.loading_label.setVisible(True)
+    def start_loading(self):
+        self.loading_text_label.setVisible(True)
       #  self.loading_movie.start()
 
     #def stop_loading(self):
