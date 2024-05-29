@@ -39,13 +39,7 @@ class MainWindow(QMainWindow):
         #self.tabs.addTab(self.output_images_tab, "Output Images")
 
         # Set up content for each tab
-        self.loading_label = QLabel()
 
-        self.loading_movie = QMovie("loading.gif")
-        self.loading_label.setMovie(self.loading_movie)
-        self.loading_label.setAlignment(Qt.AlignCenter)
-        self.loading_label.setFixedSize(300, 300)
-        self.loading_label.setVisible(False)
         self.setup_home_tab()
        # self.setup_avatar_tab()
        # self.setup_uploaded_images_tab()
@@ -168,12 +162,14 @@ class MainWindow(QMainWindow):
       #  self.upload_button_2.clicked.connect(lambda: self.open_popup(2))
         self.upload_button_2.clicked.connect(lambda: self.upload_image(2))
 
-        self.run_script_button.clicked.connect(self.start_loading)
+      #  self.run_script_button.clicked.connect(self.start_loading)
         self.run_script_button.clicked.connect(self.process_images)
 
         vertical_layout3 = QVBoxLayout()
 
-
+        self.loading_text_label = QLabel("Your output is loading...")
+        self.loading_text_label.setAlignment(Qt.AlignCenter)
+        self.loading_text_label.setVisible(False)
 
 
         self.output_label = QLabel("Your Output:")
@@ -188,7 +184,7 @@ class MainWindow(QMainWindow):
         self.output_image_label.setStyleSheet("border: 1px solid #ccc;")
 
         vertical_layout3.addSpacing(150)
-        vertical_layout3.addWidget(self.loading_label, alignment=Qt.AlignHCenter)
+        vertical_layout3.addWidget(self.loading_text_label, alignment=Qt.AlignHCenter)
 
         vertical_layout3.addWidget(self.output_label, alignment=Qt.AlignHCenter)
         vertical_layout3.addWidget(self.output_image_label, alignment=Qt.AlignHCenter)
@@ -212,13 +208,13 @@ class MainWindow(QMainWindow):
         popup.accepted.connect(popup.close)
         popup.exec_()
 
-    def start_loading(self):
-        self.loading_label.setVisible(True)
-        self.loading_movie.start()
+    #def start_loading(self):
+     #   self.loading_label.setVisible(True)
+      #  self.loading_movie.start()
 
-    def stop_loading(self):
-        self.loading_movie.stop()
-        self.loading_label.setVisible(False)
+    #def stop_loading(self):
+     #   self.loading_movie.stop()
+      #  self.loading_label.setVisible(False)
 
 
 
@@ -383,7 +379,7 @@ class MainWindow(QMainWindow):
             return
 
         # Show loading GIF
-      #  self.start_loading()
+        self.loading_text_label.setVisible(True)
 
 
 
@@ -427,7 +423,7 @@ class MainWindow(QMainWindow):
         except Exception as e:
             QMessageBox.critical(self, "Error", f"An error occurred while processing images: {e}")
         finally:
-            self.stop_loading()
+            self.loading_text_label.setVisible(False)
 
 
    # def setup_avatar_tab(self):
