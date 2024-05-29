@@ -249,7 +249,7 @@ class MainWindow(QMainWindow):
     def upload_image(self, index):
 
         # Open a file dialog to select an image
-        image_path, _ = QFileDialog.getOpenFileName(self, "Select an Image", "", "Images (*.png *.jpg *.jpeg *.bmp)")
+        image_path, _ = QFileDialog.getOpenFileName(self, "Select an Image", "/home/user/AI_Personal_Shopper/AI_Personal_Shopper/OOTDiffusion/run/examples/", "Images (*.png *.jpg *.jpeg *.bmp)")
         print(image_path)
         if image_path:
             image_name = os.path.basename(image_path)
